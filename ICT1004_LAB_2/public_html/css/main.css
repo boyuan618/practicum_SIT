@@ -1,0 +1,34 @@
+section>h2 {
+    text-decoration:underline;
+}
+
+figure {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+article>figure>a>img {
+    border: 1px solid #ddd; 
+    border-radius: 4px;  
+    padding: 5px; 
+    width: 150px; 
+}
+
+article>figure>a>img:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+figcaption {
+    color:grey;
+    font-style:italic;
+    display: flex;
+    align-items:center;
+}
+
+footer {
+    border-top: 1px solid #ddd;
+    text-align: center;
+    font-style: italic;
+    font-size: 12px;
+}
