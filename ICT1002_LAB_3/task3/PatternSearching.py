@@ -11,7 +11,7 @@ def count_occurence(candidate, pattern):
     for i in range(upper_bound):
         if candidate[i:i+len_seq] == pattern:
             result += 1
-    return "Pattern appears {} time!".format(result) if result else -1
+    return "Pattern appears {} time!".format(result) if result else "Pattern appears -1 time!"
 
 
 def main():
