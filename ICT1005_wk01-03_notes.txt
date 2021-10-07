@@ -1,0 +1,42 @@
+p -> q
+converse: q -> p
+contrapositive: ~q -> ~p
+inverse: ~p -> ~q
+
+*** P -> Q === P only if Q
+*** Q -> P === P if Q
+
+truth table
+rows: 2^number of unique elements
+
+D.N.F = Take all True results from truth table and make all elements true
+(e.g. row in truth table is T T F T, then it will be a^b^~c)
+***DNF is and(^) between the elements and or(V) between the rows
+(e.g. T T F T and T F T T would be (a^b^~c)V(a^~b^c)
+
+C.N.F = Take all False results from truth table and make all elements false
+(e.g. row in truth table is F F T F then it will be aVbV~c)
+*** CNF is or(V) between elements and and(^) between rows
+(e.g. F F T F and F T F F would be (aVbV~c)^(aV~bVc)
+
+***For both DNF and CNF, negation should only be on the element itself
+*** From DNF to CNF can use distributive law
+
+
+Formalising arguements
+(e.g. All lectures are boring. P(x): x is lecturer, Q(x) x is boring.
+∀x(P(x) -> Q(x)): for all x, if x is lecturer then x is boring)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
