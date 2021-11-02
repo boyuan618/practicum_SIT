@@ -1,0 +1,66 @@
+unsigned binary, signed binary (1st bit 1 if negative), one's complement (flip all numbers of unsigned binary if negative), two's complement (add one to one's complement if negative)
+overflow (if the two sign do not match, i.e. + plus + = -, or - plus - = +)
+
+
+Decimal to Fraction
+e.g. 46.125
+whole number first, 46 -> 0010 1110
+then, take take fraction and keep multiplying by 2
+e.g. 0.125 x 2 = 0.25   0 msb
+     0.25 x 2  = 0.5    0
+     0.5 x 2 = 1.0      1  lsb
+0.125 -> .001
+thus 46.125 -> 0010 1110.001
+
+
+fractional binary to ieee754 format
+
+formula: (-1)^s x 1.mantissa x 2^exp-127
+
+shift binary dot to become 1.something
+i.e. 10 1110.001 x 2^0 == 1.01110001 x 2^5
+since number is postive, s = 0
+thus, (-1)^0 x 1.01110001 x 2^(127+5)-127
+to 32-bit, msb = sign bit, next 8-bit=exp=132, next 23-bit is the mantissa and adding 0 at the back to fill up.
+0 10000100 01110001000000000000000
+
+
+Gray code
+1. Does not store any value
+2. maintains  1 bit change
+
+
+Parity setting
+-count total number of 1 ones to know if odd or even 
+-this setting should be the same throughout the whole message
+
+
+POS = CNF
+SOP = DNF
+
+
+KMAP -> gray code
+sum m -> 1
+d -> dont care
+
+
+
+moores law -> double every 2 years
+
+ADC (Analog to Digital Converter), DAC (Digital to Analog Converter)
+
+Digital -> Limit number of representable signals but are easily remembered and reproduced
+Analog -> Potentially infinite number of unique signals, but harder to reproduce
+
+f= 1/T
+fs > 2 x fmax
+
+
+cpu -> address and control are one direction, data is two
+contains Control Unit, Arithmetic Logic Unit and Registers
+
+
+
+Speed- > 1. Registers, Cache, Main memory, Secondary Memory
+
+VMs -> isolated platform for thing to run on
