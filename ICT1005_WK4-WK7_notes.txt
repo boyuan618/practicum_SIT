@@ -1,0 +1,50 @@
+Prove one is a subset of other
+A ∩ B = B - (B - A)
+
+A - B = {1,2,3} when A={1,2,3,4,5} and B={4,5,6,7,8}
+
+|P(A)| =  cardinality of the power which is 2^(number of elements in set)
+
+
+Function f: A -> B
+assignment of each element of A to exactly one element of B
+A is domain of f
+B is codomain of f
+i.e. f(a) = b, b is image of a under f and a is preimage of b
+
+Range of f is set of all images under f, i.e. f(A)
+
+functions are same if they have same domain, same codomain and map
+
+empty set is always a subset of all set
+
+
+one to one (injective) if and only if no two elements in the domain have the same image
+onto (surjective) if and only if for every element b in B there is an element a in A with f(a) = b
+bijection if it is injective and surjective
+
+tuple -> ordered collection
+set -> unordered collection
+ordered pair -> 2 tuples
+
+Cartesian product -> A x B = {(a,b)| a∈A ^ b∈B}
+
+Binary relation -> A subset of the cartesian product
+
+Relations
+
+Reflexive if every element of A is in the relation with itself
+symmetric if it is always ok to swap the order
+Antisymmetric, never okay to swap order
+Transitive, can always skip a step, i.e. (x,y) and (y,z) -> (x,z)
+
+
+Sum of all degrees of vertices in a graph is always twice the number of edges in the graph
+Total degree of graph = 2(number of edges)
+
+tree is a connected graph that does not contain any circuits
+tree with n vertices has n-1 edges
+vertices(dots), edges(lines)
+
+leaf (vertex of degree 1)
+branch (vertex of degree greater than 1)
