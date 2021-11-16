@@ -1,0 +1,42 @@
+descriptive statistics - data to describe or reach conclusions about that same group only
+inferential statistics - sample data from a small group to reach conclusions of the larger population where sample is from
+
+population -> entire population, usually large and expensive
+sample -> a small subset of population, usually used to represent the larger population
+
+Mean ->  Sum of all data/ number of data *** if from frequency table remember to multiply the frequency to the value 
+Median -> middle data value when the dataset is ordered in ascending order. (No calculations needed)
+Mode -> Data with the highest frequency
+
+Interquartile range is 25% to 75% -> sort data, find median then find median of first half and second half
+
+population variance -> o^2 
+population standard deviation -> square root(o^2)
+
+sample variance -> s^2
+sample standard deviation -> square root(s^2)
+**combined standard deviation -> s^2 combined = (1/(n1+n2))(n1[s1^2+(mean1-meancombined)^2] + n2[s2^2+(mean2-meancombined)^2])
+
+
+Classical probability -> All random outcomes are equally likely
+Relative probability -> Probability assigned to an outcome is the proportion of times would occur in the long run
+Subjective probability -> assigned based on a person's belief of the likelihood that it will occur
+
+random variable -> a value that follows some probability distribution, subject to some randomness or chance
+
+discrete random variable -> can find probabilities with exact outcome, from countable list
+continuous random variable -> limited to finding probabilities for intervals of values, from interval or colellection of intervals
+
+frequency distribution -> represents discrete data variables
+probability distribution -> represents disccrete random variables
+
+Law of large numbers -> as the number of trials increase, the mean outcome will tend to become the expected value
+
+
+Conditions for binomial random variable:
+1. Finite number of trials
+2. only 2 outcomes
+3. Fixed number of trials
+4. Probability of sucess or failure is constant
+
+probability density function -> f(x) = p
