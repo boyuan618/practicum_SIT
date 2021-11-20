@@ -1,0 +1,68 @@
+In a php file, anything outside of the <?php > tag is treated as html while anything inside is executed.
+
+echo -> prints content, esentially showing it into the html
+*all statements must end with a semicolon
+
+debugging with xdebug and breakpoints
+common errors: off-by-one, forgetting include all variables
+
+php can be included like bootstrap, by inclue "something.inc.php";
+
+XSS (Cross-site scripting) -> Inject javascript to run on server
+SQL injection -> insert sql commands to exploit it
+
+
+VALIDATION
+
+JS validation
+- Client process
+- Reduces server load
+- Can be bypassed
+
+
+PHP validation
+- Server process
+- Most important form
+- Essential
+
+Form validation
+
+type password/email -> email to check if input is in email format while password will hide the input
+required -> specifies which fields must be filled in
+minlength/maxlength -> Min/Max no of char allowed
+
+php
+
+sanitize_input -> trim, stripslashes,remove htmlspecialchars
+filer_var -> checks input with specified filter
+password_hash -> password should never be output in plaintext
+error msg -> informative enough to tell users what is wrong
+
+
+LAMP stack
+- Runs on linux, specifically ubuntu
+- uses apache web server
+- mysql
+- php as backend language
+- use ssl
+
+1. Never always login as root
+2. Have user groups 
+3. remember to edit the pathing of the website from dev to public
+
+
+
+
+Database
+
+MySQL with php
+1.Grant priviliges
+2.Flush to force new ones to take effect
+3. Keep in mind which fields will be used to idntify
+4. Store database credentials in a .ini file outside root with limited permissions
+Primary key -> always unique, used to differentiate between records of same value
+
+*prepare the statement to prevent sql injection attacks
+
+
+
