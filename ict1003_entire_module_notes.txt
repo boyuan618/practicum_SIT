@@ -1,0 +1,850 @@
+--------------------------------------------------------------------Chap 1 Fundamentals of Comp Arch------------------------------------------------------------------------
+
+Motherboard -> contains main memory, i/o controller and SoC processor
+
+computer -> unit that processes numbers, power supply, input device, output device
+	-> does 3 things repetitively, all programs are just a sequence of these 3 things (Loads -> Process -> output)
+		1. Stores and retrives (loads) values (data)
+		2. Transforms those value (compute in computing)
+		3. Transfers those values from one place to another
+	-> 3 main things that differ between computers
+		1. Where the values can be stored
+		2. What type of processing can be done
+		3. Where can the data be tranferrred or to
+	->  Basic functionality
+		1. Read only memory (ROM) to hold a program
+		2. Random access memory (RAM) to hold variables and data
+		3. An arithmetic logic (ALU) to process them
+		4. 2 ports for input/output
+	-> Main considerations
+		1. CPU
+		2. Clock
+		3. Reset
+		4. Memory
+
+embedded comptures -> microprocessors that are hidden, e.g. thermometer
+
+Systems-on-Chips -> Microcontroller that has been integrated with other interface systems on a single chip
+
+Clock -> synchronous: Signals triggered on clock edges, makes digital logic reliable
+                 asynchronous: Not in line with clock edges
+	
+                 Dividers & Multipliers -> used to derive different clock speeds 
+                 Closer to a core of CPU (like registers & ALU) are clocked faster.
+                 Clock speed rating:
+                 	1. Registers
+                 	2. ALU
+	3. External memory
+	4. peripherals
+                 
+                 Logic bits are stored as voltage, in flip-flops latches and as electronic charge in a capacitive cell.
+
+Memory -> Non-volatile memory -> Retains contents when the power is turned off. Can be programmable or fixed
+	  Volatile memory -> Wiped whenever power goes off, e.g. SRAM & DRAM
+
+	 Speed ranking:
+		1. Registers -> Very fast access but limited numbers within CPU, operates at CPU clock rate, 2-128 registers
+		2. Cache Memory -> Fast access static RAM close to CPU. Access time 8-35nS, 1kb to 512kB
+		3. Main Memory -> Dynamic RAM or ROM, time 20-100nS, size 1kb-1GB
+		4. Secondary Memory -> Not always random access but non-volatile, based on flash or magnetic tech, 5-20mS, 1MB-80GB
+
+Registers -> How register works (pg 44 lecture 1)
+	Steps of transfer data from R0 to R1:
+		1. R0 output enable
+		2. R1 input enable
+		3. R0 output disable and R1 input diable
+
+
+---------------------------------------------------------------------------------Chap 2: The CPU-----------------------------------------------------------------------------------
+
+Binary logic -> Only on or off (1 or 0)
+nMOS -> Closed when Gate = 1(have voltage) and open when gate= 0 (0V)
+pMOS -> Closed when Gate=0 (0V) and open when Gated=1(have voltage)
+pMOS and nMOS are used to create different gates, like and, or, nand,nor and many more.
+
+software programming -> instruction codes go through instruction decoder then to general purpose arithmetic and logic functions
+hardware programming -> only specific sequence of arithmetic and logic
+hardware programming has fast computation but very inflexible while software programming is slower and more compelx but easily programmable
+
+von Neumann's -> 1. Both data and program are stored in same memory
+		2. Contents of memory are addressable by location, without regard to data type
+		3. Execution occurs sequentially (unless explicitly modified)
+
+Program -> A sequence of instructions
+Data -> Values these instructions operate on
+Memory -> Sequential list of addressable storage elements for storing both program and data
+
+Instruction set Architecture (ISA)-> specifies interface between hardware and software
+
+Microcomputer -> contains main memory, i/o controller and processor
+	           -> interconnected by a bus structure which consists of collection of wires through which binary information can be transferred in parallel
+
+ROM -> 1. Contents not easily changed
+	2. Once change, contents can be read but not write
+	3. Contents are non-volatile
+
+RAM -> 1. contents can be read and written to any time
+	2.contents are volatile
+	3. 2 categories, static or dynamic
+
+fixed sized -> accessible at high speed and in any order
+address -> pg 22 chap 2
+MSB-> most left bit
+LSB -> most right bit
+big endian -> MSB on top, LSB below (MSB smallest address)
+little endian -> LSB on top, MSB below (LSB smallest address)
+
+Calculating binary and hex of instructions -> Refer to cheat sheet and use python
+
+
+Loosely coupled -> via external bus, network or port
+Tightly coupled -> via fase internal bus
+
+CPU role -> Fetch Decode Execute (ie fetch instruction, decode instruction(determine what data), fetch data, execute instruction, write data(output)
+
+CPU busses and components and cpu path -> pg 32 chap 2
+
+Data register -> used to hold data temporarily during CPI operations
+Address register -> used to hold addresses of operands in memory
+Stack pointer -> special register that is used to manage a stack in memory.
+Status register -> contains current status of the CPU and set of 1 bit flages that indicate outcomes
+Program counter -> contains address of the next instruction to be executed
+Instruction register -> holds the opcode of the current instruction
+temporary or buffer registers -> holds the address or data internally during CPU operations or instruction execution
+
+Flags
+N -> whenever MSB is 1
+Z -> when result is zero
+V -> whenever the result of two complement range of number representation cannot be represented. i.e. + and + gives - or - and - give  +
+C -> when result of an addition causes a carry at the MSB or subtraction causes a borrow .i.e 10 - 01 = 01, the one has to be carried 
+
+ALU -> performs the arithmetic and logical operations specified by an instruction
+         -> Contains functional circuits
+	1. Arithemtic Unit -> +,-,/,*
+	2. Logic Unit -> AND, OR, XOR
+	3. performs bit shift and rotation
+
+Control unit: 
+	1. Decoding instructions -> decodes opcode into internal and external control signals
+	2. ALU -> Activates specific ALU functions based on decoded signals
+	3. Movement of data -> controls movement of data between memory-registers and or internally between registers
+	4. External signals -> Handles external signals into the CPU such as interrupts and reset
+
+Buses:
+	CPU internal bus/Control bus: 32-bit CPU have 32-bit internal bus (impacts the number of bits a CPU can process in one cycle)
+	Data bus: How much data can be transferred in one cycle
+	Address Bus: How large is the address space
+
+Execution of machine code -> pg 49 to 54 of chap 2
+
+Havard Architecture -> two seperate memory for code and data
+Von Neumann Architecture -> Singapore shared memory for both code and data
+
+Flynn's Taxonomy: 
+	SISD: Single Instruction, Single Data
+	SIMB: Single Instruction, Multiple Data
+	MISD: Multiple Instruction, Single Data
+	MIMD: Multiple Instruction, Multiple Data
+
+CISC: One instruction, multiple cycles
+RISC: One instruction, one cycle
+
+
+--------------------------------------------------------------------------------------Chap 3: ISA-----------------------------------------------------------------------------------
+
+microcontroller properties:
+	1. Integration: Able to implement a whole design onto a single chip
+	2. Cose: Usually cheap
+	3. Clock Freq: Compared to others, usually use a low clock freq
+	4. power consumption: low
+	5. Bits: 4 to 32 bits
+	6. Memory: Limited, usually less than 1MB
+	7. I/O: Low to high, 8 to 150 pinout count
+
+MSP430 properties:
+	- Low power consumption: 0.1 μA for RAM data retention, 0.8 μA for real-time clock mode operation, 250 μA/MIPS during active operation.
+	- pg12 chap 3
+	- 16-bit internal architecture, 16-bit external data bus
+	- Uses von-Neumenn architecture, common bus to all memory and peripherals
+	- 16-bit RISC cpu
+		– Compact core design reduces power consumption and cost
+		– 27 core instructions (8 Jump, 7 single and 12 double-operand instructions)
+		– 7 addressing modes
+		– 8/16-bit instruction addressing format
+	-memory
+		– 16 16-bit registers (4 dedicated-use and 12 general registers)
+		– 16-bit Arithmetic Logic Unit (ALU)
+		– 16-bit data bus (8-bit addressability)
+		– Supports 8/16-bit peripherals
+		– Address bus size is dependent on model
+	– The architecture has a 16 bit Arithmetic Logic Unit (ALU). 
+	– Carrying out operations affects the state of the following flags:
+		• Zero (Z);
+		• Carry (C);
+		• Overflow (V);
+		• Negative (N).
+	– The MCLK (Master) clock signal drives the CPU.
+	-Registers -> pg 22 to 29 chap3
+	-uses little endian (eg for a word, address is even at 1002h, msb is 1003h while lsb is 1002h)
+	-instructions -> refer to quick reference or pg 37 chap 3
+
+
+--------------------------------------------------------------------------Chap 4: Intro to assembly-------------------------------------------------------------------------------
+
+Assembly allows for:
+	- very efficient codes to be created
+	- unnecessary programming overheads
+	- more compact program size
+	-codes with faster execution speed
+
+Use assembly in:
+	-Critical parts of the os 
+	-i/o intensive programs
+	-time-critical or time-dependent codes
+
+Text editor– edit the text-based mnemonics in source file (*.asm).
+Assembler– converts mnemonics in source file into machine code and produces an object file (*.obj).
+Linker– combines several object files (e.g. from libraries) into a load module that contains machine code and address information  (*.abs).
+Loader– uses load module’s address info. to download instructions and data constants into appropriate memory areas for execution.
+
+executable instructions -> valid instructions of the processor, executed when program runs
+assembler directives -> they tell the assembler about the desired characteristics of the program, processed during program assembly and influence how the program is loaded into memory
+
+msp430 instructions-> refer to quick reference or pg 13 chap 4
+
+msp430 reads up to 200 char per line
+
+assembly syntax -> pg 15-26 chap 4, for msp430 specific refer to quick reference
+
+Assembler directives: supply data to program and control the assembly process
+	– Assemble code and data into specified sections
+	– Reserve space in memory for uninitialized variables
+	– Control the appearance of listings
+	– Initialize memory
+	– Define global variables
+	– Specify libraries from which the assembler can obtain macros
+	– Select assembler sections (.sect,.text, .bss, .usect). ***pg 32-34 chap 4***
+	– Define values for memory locations (.byte, .word, .string, .space). ***pg36-40 chap 4***
+	– Create symbol table entries (.equ, .set). ***pg 42 chap 4***
+	– Define library references and definitions (.global, .ref, .def) ***pg 44-45 chap 4***
+	– Specify the end of program (.end). ***pg 47 chap 4***
+
+Assembly process ***pg 49 chap 4***
+
+For information on  Machine code translation, Instruction operation and description, Impact on the status bits, Length and clock-cycle information in MSP430:
+refer to quick reference or instruction set summary
+
+
+----------------------------------------------------------------Chap 5: Executable Assembly Instructions---------------------------------------------------------------------
+
+Assembly program -> refer to chap 5 or quick reference, for things like movb or xor
+
+for testing signed values, use JGE, JL or JN
+for unsigned values, use JLO or JHS
+
+
+----------------------------------------------------------------------Chap 6: Modular Programming-----------------------------------------------------------------------------
+
+Large, complex software should be decomposed into several less complex modules.
+	- Modules can be designed and tested independently.
+	- Modules can reduce overall program size as the same code segments may be required in several places.
+	- Modules that are general can be re-used in other projects.
+
+Characteristics of a good software module:
+	- Loose coupling –datawithin module is entirely independentof other modules.
+	- Strong modularity – should perform a singlelogically coherent task.
+
+
+Subroutines -> essentially a function
+return address is save before going into subroutine, will be where computer exits to. (done with CALL)
+
+Besides subroutine calls, the system stack is also used in exception handling, and as a temporary storage area for local variables and 
+subroutine parameters. 
+
+Since a stack grows towards lower memory, it is maintained in high RAM area, starting from an evenaddress. 
+
+
+Passing parameters using Registers:
+	Pros -> very efficient as parameters are alreadly in reigster within the subroutine and can be use immediately
+	Con -> Reduces the number of available registers within subroutine
+	Con -> lacks generality due to limited no of registers
+
+Passing parameters using Memory:
+	- A region in memory is treated like a mailbox and is used by both the calling program and subroutine.
+	- Parameters to be passed are gathered into a block at a predefined memory location
+	- The start address of the memory block is passed to the subroutine via an address register.
+	- Useful for passing large number of parameters.
+	- This method is also called “passing by reference”.
+
+Passing parameters using Stack:
+	- Parameters are pushed onto the stack before calling the subroutine and retrieved from the stack within the subroutine.
+	- Most general method of parameter passing –no registers needed, support recursive programming.
+	- Number of parameters passed can be quite large, as long as stack overflow does not occur.
+	- Parameters pushed onto the stack must be removed by the calling program immediately after returning from subroutine.
+	- If not, repeated pushing of parameters to the stack will lead to a stack overflow.
+
+Pass by value -> the value of data or variable is passed to the subroutine
+Pass by reference:
+	- Address of the variable is passed to the subroutine
+	- Used wen the parameter passed is to be modified by subroutine
+	- Used when large quantity of data (e.g. array) have to be passed into or out of the subroutine.
+
+local variables -> same as other lanugages
+stack frame:
+	- A stack frame of N bytes can be created on the system stack immediately on entry into subroutine.
+	- Can be accessed with the stack pointer
+	- created by adding frame size N to SP
+	- used as a reference to access all local variables
+	- appropriate positive displacements from SP is used to access (e.g. SP+1)
+
+
+Summary:
+- call and ret are the basic instructions for implementing subroutines. 
+- The stack is the most favored method for parameter passing but a combination of methods may be used (e.g. pass in via stack and pass out via register).
+- Saving and restoring used registers within a subroutine is necessary to make it transparent to the calling program. 
+- Local variables within a subroutine are usually maintained on the system stack.
+
+-----------------------------------------------------------------------------Chap 7 I/O interfacing techniques-----------------------------------------------------------------
+
+Interfacing -> process of connecting two devices together so they can exchange info
+Interfacing include-> physical connections, hardware, a set of rules and standards
+
+Types of interfaces:
+	1. parallel interface
+	2. serial interface
+	3. ADC interface
+	4. DAC interface
+
+Physical requirements for interfacing:
+	– The processor provides TTL/CMOS level signals (0 = Logic 0, Vcc = Logic 1). 
+	– Real world signals may vary between micro-volts to kilo-volts.
+	– Appropriate electrical interface may be needed.
+	– To transmit digital signals from MCU to a longer distance, the TTL level is changed to larger voltages (.e.g 15 Volts in RS232C).
+
+Digital and Analogue i/o:
+	- digital signal changes between discrete voltage levels
+	- analogue signal is a signal with continuous voltage levels
+
+ADC -> Analogue output of a sensor is converted to digital through Analog to Digital Converter(ADC)
+DAC -> digital output of a processor is converted into analogue through Digital to Analog Convertor (DAC)
+
+Parallel data communications -> more than one bit of information to be transferred between the compter and external at the same time, usually
+done between the processor and devices within a meters. ***Faster data transfer, but expensive when too far away
+
+Serial communications -> allow one bit to be transferred through two/three wires, where data is converted from parallel to serial then sent over.
+		- Less expensive -> less wires and connections
+		- slower 
+		- more robust -> fewer wires used
+		- used with devices very far away or for internal communications in small devices.
+
+Types of serial data transfer:
+	1. Simplex mode: Transmission can only occur in one direction only
+	2. Duplex mode: Transmission can occur in both directions, but only one direction at a time
+	3. Full-Duplex mode: Transmission in both directions simultaneously (aka asynchronous transmission)
+	
+Synchronous transmission -> A common clock is used to synchronize send and receive
+Asynchronous transmission -> No common clock, information transmitted one bit at a time ( for more look at pg 30-38 chap 7)
+	-requires both sides to be configured with:
+		1. baud rate of transmission
+		2. number of data bits
+		3. sense of the optional parity bit
+		4. number of stop bits
+
+Baud rate -> data transfer rate of the serial link, formula is 1/T where T is duration taken for each bit. (E.g. for 10bit per char, baud rate of 1200 -> 120 char per sec)
+RS-232 -> serial interface standard (pg40-46 chap 7)
+Most processors produce TTL level signals, hence need to convert it to RS-232
+
+RS-232 has optional handshaking to implement flow control, differentiating devices as:
+	- Data terminal Equipment: Devices that are end-points like computers
+	- Data communication equipment: Devices that extend communication like modems
+
+
+Periphal Registers allow for:
+	- configuring periphal
+	- using the periphal
+
+Memory Mapped i/o:
+	• The peripheral registers are interfaced onto the same bus as the memory. (Thus, they share the same address space)
+	• Each peripheral register is given an address
+	• These peripheral registers are accessed in exactly the same way as any other location in the memory (RAM/ROM). 
+
+ - involves handling of I/O data transfer
+- writing data to output device 
+- reading data from input device
+
+Two techniques of data transfer:
+	1. Polled I/o (Program controlled) -> cpu initiates, controls and terminates data transfer by executing a set of instructions
+	2. Interrupt driven -> device initiates but CPU controls and terminates data transfer
+
+Polling -> continuously testing a port to see if data is available (keeps checks the port if it has data or can accept data)
+	- inherently inefficient
+	- Process (pg 56-59 chap 7)
+	-Advantages
+		1. minimum hardware interface circuitry between i/o device and processor
+		2. programmer has complete control over process
+		3. Easiest to test and debug
+	-Disadvantages
+		1.Inefficient as CPU waits in a loop and cannot perform any other task until transfer complete
+
+	- Used when data transfer must be completed before program continues
+
+Interrupt-driven:
+	- data transfer initiated by external device
+	-interrupt is external hardware event (sends an interrupt request to cpu)
+	- causes the cpu to interrupt the current instruction and execute a special routine called interrupt service routine
+	- program resumes after data transfer is complete
+	-Advantages:
+		1. efficient use of CPU
+		2. CPU can continue with other tasks between interrupts
+	-Disadvantages
+		1. more hardware interface circuitry required
+	
+	- used when timing of data transfer cannot be known beforehand or occurs infrequently
+
+Bluetooth -> (page 73-95 chap 7)
+
+-----------------------------------------------------------------------Chap 8: Solid State Memory Subsystems----------------------------------------------------------------
+
+bus -> communication pathway between two or more devices, eg data bus, address bus, control bus etc
+
+Data bus -> set of data lines that collectively provide a path to move data between devices, where number of data lines is width of the data bus
+Address bus-> set of address lines that is used to designate the source or destination of data on the data bus, similar to data bus, no of data lines is width
+Control bus -> control lines used to control the access to and the use of the data and the address lines, with its signals supporting synchronous or asynchronous timings
+
+Typical control lines include:
+– Memory Write, Memory Read (Memory Operations)
+– I/O Write, I/0 Read (I/O Operations)
+– Interrupt Request, Interrupt ACK (Interrupts)
+– Clock (for Synchronous data transfers)
+– Reset (initializes all modules)
+
+Read & Write operation sequence -> pg 9 to 13 chap 8
+
+• Synchronous Timing
+	– simpler to implement and test
+	– Less flexible as all devices on the bus are tied to a fixed clock rate.
+
+• Asynchronous Timing
+	– Very flexible as a mixture of slow and fast devices, using older and newer technology, can share a bus.
+	– Operations of the bus is more complex as different devices may operate at different speeds.
+	– A slow device may hold up the entire bus.
+
+• Access Time
+	– Time from the instant that a control request is sent to the memory to the instant that the data have been stored or made available for use.
+	– For mechanical storage devices, the access time is the time it takes to position the read-write mechanism at the desired location.
+
+• Memory cycle time
+	– Access time plus any additional time required before another memory access can commence.
+
+• Transfer Rate
+– This is the rate at which data can be transferred into or out of a memory unit.
+– This is usually (1 / Memory Cycle Time) for semi-conductor based memory devices
+
+For mechanical storage devices:
+The following relationship holds:
+TN = TA + (N / R)
+Where
+TN = Average time to read or write N bits
+TA = Average Access time
+N = Number of bits
+R = Transfer rate, in bits per second (bps)
+
+Cache memory -> small and optional amount of fast memory that sits between main memory and cpu
+memory can be single level or multi level
+
+Cache operations are usually handled by the cache controller.
+	1. CPU requests contents of a main memory location
+	2. Checks if data is available in the cache
+	3. If present, CPU reads from cache (fast)
+	4. If not present, the cache controller will fetch the required block from main memory and store it in the cache.
+	5. The CPU will then read from the cache.
+
+Secondary Memory -> usually external (thus, external memory) to the microprocessor and provides the largest storage space for data and program.
+External Memory -> consists of peripheral storage devices that are accessible to the processor via I/O controllers.
+
+Memory -> an entity that allows a collection of bits to be stored and retrieved.
+Main Memory -> required for the basic operation of a CPU (Fetch-Decode-Execute cycle)
+
+Read Only Memory (ROM)
+	Contents are non-volatile (retained after power-off).
+	Contents are not easily changed, but once changed, contents can be read but normally not written to (from the CPU’s perspective).
+	Different types of commonly-used ROM includes:
+		‒ PROM: Programmable ROM
+		‒ EPROM: Erasable Programmable ROM
+		‒ EEPROM: Electrically Erasable Programmable ROM
+		‒ FLASH
+	Computer systems require ROM to store system programs (e.g. BIOS – Basic Input/Output System), configuration settings, etc.
+
+Random Access Memory (RAM)
+	Its contents can be read and written to at any time.
+	Contents are normally volatile. (Data is retained only when power is on)
+	Two major types of RAM
+		− DRAM: Dynamic RAM
+		− SRAM: Static RAM
+	Computer systems requires RAM so that it can store its working variables, store temporary data, maintain a system stack, etc.
+
+The main memory is constructed using memory cells that support two basic operations: Read and Write
+	 A basic memory cell has 3 terminals:
+		– Select: Activates/Selects a cell for reading/writing
+		– Control: Indicate if a read or write operation is required
+		– Data: Indicate the logic to be stored (Write operation) or the logic that has been stored (Read operation)
+
+Read & Write -> pg 28-29 chap 8
+
+A common building block for most digital devices, including RAM, are Transistors.
+	- view transistors as a simple digital switch with 3 different pins:  Source (S), Gate (G) and Drain (D).
+	- Only when the Gate is closed (i.e. G = Logic 1), current is allowed to flow from Source to Drain.
+
+Static RAMs (SRAM) need power to retain state, usually has short access time (few nanosecs.)
+	- A static RAM cell in a memory chip consists of two cross-connected inverters to form a latch
+	- Chip implementation typically uses CMOS (Complementary Metal-Oxide Semiconductor) cell whose advantage is low power consumption
+	- Two transistors controlled by address line (Word Line) act as switches between the cell and the Data lines (Bit Lines)
+	- To write, bit lines driven with desired data
+
+Memory cells are organised in an array consisting of Word lines and bit lines.
+
+
+Static RAMs have short access times, but need several transistors per cell, so density is lower.
+
+Dynamic RAM (DRAM)
+	- are simpler for higher density and lower cost, but access times are longer.
+	- Useful when density/cost advantages outweigh slowness.
+	- DRAM are widely used in computers as the main memory.
+
+Cells consist of a transitor and a capacitor
+
+For Read
+	- charge from cells in selected row is checked by sense amplifiers on bit lines
+	- 1 or 0 if charge is above or below threshold
+	- Action of sensing the bit lines also causes refresh of charge in all cells of selected row
+For Write
+	- access the row and drive bit lines to alter amount of charge in subset of cells
+	- Refresh rows periodically to maintain charge
+
+
+DRAM vs SRAM
+Both volatile
+	– Power needed to preserve data
+• DRAM 
+	– Simpler to build (less components)
+	– More dense 
+	– Less expensive
+	– Needs refresh
+	– Higher Capacity, Larger memory units
+• SRAM
+	– Faster
+	– Suitable to be used as Cache
+
+
+A read-only memory (ROM) has its contents written only once, at the time of manufacture
+	• The basic ROM cell in such a memory contains a single transistor switch for the bit line
+	• The other end of the bit line is connected to the power supply through a resistor
+	• If the transistor is connected to ground, bit line voltage is near zero, so cell stores a 0
+	• Otherwise, bit line voltage is high for a 1
+
+
+Cells of a Programmable ROM (PROM) chip may be written after the time of manufacture
+	– A fuse is burned out with a high current pulse
+
+An Erasable Programmable ROM (EPROM) uses a special transistor instead of a fuse
+	– Injecting charge allows transistor to turn on (Logic 0)
+	– Erasure requires UV light to remove all charge
+
+An Electrically Erasable ROM (EEPROM) can have individual cells erased electrically (typically a higher voltage than logic 1 or 0)
+
+Flash memory is based on EEPROM cells
+	• For higher density, Flash cells are designed to be erased in larger blocks, not individually
+	• Writing individual cells requires reading block, erasing block, then writing block with changes
+	• Greater density & lower cost of Flash memory outweighs the inconvenience of block writes
+	• Widely used in cell phones, digital cameras, and solid-state drives (e.g., USB memory keys)
+
+---------------------------------------------------------------------------Chap 9 Magnetic memory------------------------------------------------------------------------------
+Due to cost as well as space constraints, the capacity of the main memory is very limited, thus external secondary memory has to be used.
+
+Types of external secondary memory include:
+	– Magnetic: e.g. mechanical hard-disk, floppy disk, etc.
+	– Optical: CD-ROM, CD-RW, DVD, BLU-RAY, etc.
+	– Semiconductor: Memory cards, Solid-State Drives, etc.
+	– Anything that can store discrete values.
+
+Computers often use magnetic hard disks for large secondary storage
+• One or more platters on a common spindle.
+• Platters are covered with thin magnetic film
+• Platters rotate on spindle at constant rate
+• Read/write heads in close proximity to the surface can access data arranged in concentric tracks.
+
+Read & Write
+	• Recording & retrieval are performed via a conductive coil called a Head
+	• May be single read/write head or separate ones
+	• During read/write, head is stationary, platter rotates
+	• Write
+		– Current through coil produces magnetic field
+		– Pulses sent to head
+		– Magnetic pattern recorded on surface below
+	• Read
+		– Can be a separate read head, close to write head
+		– Partially shielded magneto resistive (MR) sensor
+		– Electrical resistance depends on direction of magnetic field
+
+Data organization and formatting
+	- Data is stored on the surface of the platter in concentric rings called Tracks
+		– Each track has same width as the head
+		– Gaps between tracks to minimise interferences from adjacent tracks
+	• Tracks are divided into Sectors
+	• Sectors may be separated by a small gap to reduce precision requirement
+	• Minimum Data Block Size is one sector
+
+Common modern hard disk characteristics
+	• Movable head
+		– One read/write head per side
+		– Mounted on a movable arm
+	• Multiple double-sided platters
+
+Multiple Platter hard disks
+	• Most hard disks you have in your computer today have multiple platters per disk.
+	• Each platter surface will have one read/write head that are joined and aligned so that the heads are in the same position for each platter
+	• Aligned tracks on each platter form Cylinders
+	• A Data is striped by cylinder
+		– reduces head movement
+		– Increases speed (transfer rate)
+
+
+Speed of Hard Disk
+	• Seek time (TS)
+		– Time it takes for the head to move to the correct track
+	• Rotational Delay (TR)
+		– Time it takes for the disk to rotate until the read/write head reaches the starting position of the target sector
+	• Access Time (TA)
+		– Time from request to the time the head is in position (TS + TR)
+	• Transfer Time (TT)
+		– Time required to transfer the required data after the head is positioned
+	• The rotational delay, TR, is dependent on the rotational speed of the disk (commonly denominated in Revolutions Per Minute, RPM)
+	• For calculations, RPM is usually converted to Revolutions Per Second, RPS where: RPS = RPM/60
+	• For a random section, Avg. Rotational delay, TR = 0.5 /RPS seconds  (0.5 for half a revolution) 
+	• The Transfer Time, TT, is also dependent on the rotational speed of the disk, as well as the Track Density, DT (number of sectors per track),
+	Sector Density, DS (number of bytes per sector) and the number of bytes for the transfer N. Transfer Time, TT = N / (RPS x DT x  DS)
+
+Track to track access time – Time taken to move from one track to successive track
+If data is stored in successive tracks, inter track access time is to considered
+
+A single magnetic hard disk suffers from the following:
+	– The access times for moving the head to the correct position significantly lowers the transfer rate of the disk
+	– Magnetic hard disk are mechanical devices that suffers “easily” from crashes
+
+One possible method is the use of a Redundant Array of Independent Disks (RAID)
+	– There are many different RAID configurations
+	– Some of these configurations use data distributed across physical drives (known as striping) to improve access times (e.g. RAID 0)
+	– Some configurations can also use redundant capacity to mirror a drive (e.g. RAID 1)
+	- Example -> pg 19, 20 chap 9
+
+Uni and Multi-Program Systems
+• A typical computer system has many programs that can be stored in the memory and executed. 
+• Uni-program System
+	– Uni-program means that the computer, at any one time, can only be in the process of executing one program (no concurrency)
+	– The computer must complete the execution of the program before execution of another program can begin
+	– Memory split into two
+		• for Operating System (monitor)
+		• one for currently executing program (“user”)
+• Multi-program Systems
+	– More than one program can be executed concurrently  (but need not be simultaneously)
+	– The “user” memory is sub-divided and shared among active processes
+
+Swapping
+• Long term queue of programs/processes stored on disk
+• Processes “swapped” in as space becomes available
+• As a process completes it is moved out of main memory
+• If none of the processes in memory is ready (i.e. all I/O blocked)
+	– Swap out a blocked process to intermediate queue
+	– Swap in a ready process or a new process
+
+Partitioning - Fixed and Dynamic
+• Partitioning: Splitting memory into sections to allocate to processes (including Operating System)
+• Two Methods:
+	- Fixed or Dynamic Partitions
+	- Fixed-sized partitions
+• Size of each partition is fixed
+• Partitions may or may not be of equal size
+• Process is fitted into smallest hole that will take it (best fit)
+• Some wasted memory
+
+
+Dynamic Partitioning
+• When a process in placed into the main memory, the exact required memory is allocated to the process
+• This leads to a hole at the end of memory, too small to use
+	– Only one small hole - less waste
+• When all processes are blocked, a process is swapped out so that another ready process can be swapped in
+• The new process may be smaller than the swapped-out process, thus, another hole is created
+• Eventually there will be a lot of holes (this phenomenon is known as fragmentation)
+• Solutions:
+	– Coalesce
+		• Join adjacent holes into one large hole
+	– Compaction
+		• From time to time go through memory and move all holes into one free block.
+		• This process is also known as de-fragmentation.
+
+Paging
+• To overcome the problem of “holes” in basic partitioning, Paging is used.
+• The main memory is divided into small chunks of equal sizes. These chunks are known as Page Frames.
+• Programs/processes are divided into equal sized small chunks known as Pages.
+	Size of Page Frame = Size of Page
+• The required number page frames are allocated to a process.
+• Operating System maintains list of free frames
+• A process does not require contiguous page frames, thus will need a Page Table to keep track of the memories allocated.
+
+Relocation of Codes
+• There is no guarantee that a process will be loaded into the same place in the main memory during swapping
+• But instructions could contain absolute addresses
+	– Locations of data
+	– Addresses for instructions (branching)
+• To solve this problem, the user will code using Logical Addresses whilst the CPU will execute from the actual Physical Addresses
+	– Logical address - relative to beginning of the program
+	– Physical address - actual location in memory (this time)
+	• Conversion between these addresses is the job of the Memory Management Unit of the operating system
+
+
+Virtual memory
+Demand paging
+• Virtual memory works on an extension of paging known as Demand Paging which:
+	– Does not require all pages of a process to be in memory
+	– Bring in pages as required
+• However, this could lead to a Page Fault where the required page is not in the main memory.
+• To handle Page Faults, the Operating System must:
+	– Swap in the required page
+	– May need to swap out a page to make space
+	– Select page to throw out based on recent history
+
+Use of Virtual Memory
+• Modern programs can be very large in size compared to the capacity of the main memory
+• Virtual memory is used so that processes/programs that are bigger than total memory available can be executed.
+• A large program or many active programs may not be entirely resident in the main memory
+• Use secondary storage (e.g., magnetic disk) to hold portions exceeding memory capacity
+• Needed portions are automatically loaded into the memory, replacing other portions
+• Programmers need not be aware of actions; virtual memory hides memory capacity limitations
+• Programs written assuming full address space
+• Thus, programs are written using the virtual or logical addresses
+• This must be translated into the actual physical address when it is executed by the processor
+• Once translated, processor will proceed with the normal memory operation if the addressed contents are in the memory
+• Operations of the virtual memory is also handled by the Memory Management Unit which may be part of the operating system
+
+Memory Management Unit
+• Maintains virtual→physical address mapping to perform the necessary translation
+• When no current physical address exists, MMU invokes operating system services which will transfer the desired contents from disk to the main memory using DMA
+
+Address Translation
+• Pages of fixed-size are  used. (e.g. 2K-16K bytes)
+• For translation, divide the logical/virtual address bits into 2 fields
+• Lower bits give offset of word within the page
+• Upper bits give virtual page number (VPN)
+	– Number of bits depends on the number of pages
+• Translation preserves the offset bits, but causes VPN bits to be replaced with page frame bits
+	– Number of Page Frame bits depends on the number of page frames supported by the memory
+• Page table (stored in the main memory) provides information to perform translation
+
+The Page Table
+• MMU must know location of page table
+• Page table base register has starting address of the page table for the entire system.
+• Adding VPN to base register contents gives location of corresponding entry about the page
+• If page is in memory, table gives frame bits.
+• Otherwise, table may indicate disk location
+• Control bits for each entry include:
+	– Valid bit: Indicates if a page is in the main memory
+	– Modified bit: Indicating if the page in memory has been modified and needs to be copied-back to the disk upon swapping out.
+
+Virtual Memory Considerations - Trashing
+• Trashing is a condition that occurs when the operating system spends nearly all of its time doing swapping.
+• Trashing happens usually when there are too many processes in too little memory causing a page to be thrown out just before it is to be used.
+• Little or no real work is done as disk will be accessed nearly all the time
+• Solutions
+	– Good page replacement algorithms
+	– Reduce number of processes running
+	– Fit more memory
+
+-------------------------------------------------------------------------Chap 10: Towards Faster Speeds------------------------------------------------------------------------
+Pipelining
+• With some modifications to the CPU hardware, it is possible for one or more separate stages of Fetch-Decode-Execute to be executed in parallel. 
+• Thus, it is possible for a CPU that supports pipelines to be decoding one instruction, executing another instruction and fetching the next instruction 
+all at the same time.
+
+Issues with pipelining
+• In the example on the previous slide, the Minimum Time it will take for the 3 instructions to be completed for this 3-stage pipelined CPU is shown in the timing diagram.
+• Two main assumptions were made for the minimum time scenario:
+	– All instructions can be executed in parallel with no memory conflicts or data dependencies
+	– All instructions are executed sequentially, with no branching
+• These assumptions are some of the Pipeline Issues that may affect the performance of a pipelined CPU.
+
+Pipeline Issues – Data Dependencies
+• Consider two successive instructions Ij and Ij+1 in a 4-stage pipelined CPU with the following states: Fetch (F), Decode (D), Compute (C), Write Results (W). Assume
+each stage takes one cycle to execute.
+• Assume that the destination register of Ij matches one of the source registers of Ij+1
+• Result of Ij is written to destination in cycle 4
+• But Ij+1 reads old value of register in cycle 3
+• Due to pipelining, Ij+1 computation is incorrect
+• Solution: Stall (delay) Ij+1 until Ij writes the new value
+• Condition requiring this stall is known as a data hazard
+• Destination R5 of Add is a source for Subtract
+• There is a data dependency between them because R5 carries data from Add to Subtract
+• On non-pipelined CPU, result is available in R5 because Add completes before Subtract
+• With pipelined execution, old value is still in register R5 when Subtract is in Decode stage
+• So stall Subtract for at least one cycle in Decode stage
+• New value of R5 is then available after cycle 4
+
+Stalling - Implementation Details
+• Control circuitry must recognize dependency while Subtract is being decoded in cycle 3
+• In cycle 3, control unit will compare destination identifier in the Compute stage against source(s) in the Decode stage
+• R5 matches, so Subtract kept in Decode while Add is allowed to continue normally
+• After Add completes its operations, Subtract be allowed to continue
+
+Software Handling Dependencies
+• Compiler can generate & analyze instructions to reduce Data Harzards
+• Data dependencies are evident from registers
+• Compiler puts explicit NOP (No Operations) instructions between instructions having dependencies
+• Delay ensures new value available in register but causes total execution time to increase
+
+Branch Delays
+• Ideal pipelining: fetch each new instruction while previous instruction is being decoded
+• Branch instructions alter execution sequence, but they must be processed to know the effect
+• Any delay for determining branch outcome leads to an increase in total execution time
+• Techniques to mitigate this effect will not be covered as part of this module
+
+Unconditional Branch Delays
+• Consider instructions Ij , Ij+1 , Ij+2 in sequence
+• Ij is an unconditional branch with target Ik
+• The compute stage (C) determined the target address by adding an offset to the PC
+• In pipeline, target Ik is known to Ij in cycle 4, but instructions Ij+1 , Ij+2 are fetched in cycles 2 & 3
+• Target Ik should have followed Ij immediately, so discard Ij+1 , Ij+2 and incur two-cycle Branch Penalty
+
+Super-scalar CPU
+• An ALU contains functional blocks to perform Arithmetic, Logical and Shift operations.
+• Typical ALUs allow only one of these functions to be selected at any one time
+• Super-Scalar CPUs allow each of these functions to be selected independently and simultaneously.
+• Super-Scalar CPUs also have a Fetch Unit that allows multiple instructions to be fetched at the same time.
+• An elaborate Fetch Unit brings 2 instructions into an instruction queue in every cycle
+• A Dispatch Unit takes 2 instructions from the head of queue in every cycle, decodes them, sends them to appropriate execution units
+• A Completion Unit writes results to registers
+
+Pipelines, Super-Scalar, Multi-core
+• Pipelines allow different sub-components of the processor (e.g. Buses, Control Unit, ALU, Registers Unit) to be used independently at the same time
+• Super-Scalar extends the concepts of pipelines by allowing the different functional units of the ALU to be used independently at the same
+• Both pipelines and super-scalar architecture supports instruction-level parallelism.
+• To support parallel processing at the thread/process level, multiple CPUs will need to operate independently with their own set of cache memory.
+• A processor with multiple independent CPUs is known as a Multi-core Processor.
+
+Multi-core performance
+•Multi-cores are useful when parallel processing need to be performed. Examples of parallel task/process creation can be based on the:
+	– Complier
+		• Determines at compile time which parts can be executed in parallel
+		• Split off for different CPU cores
+	– Application
+		• Application written from scratch to be parallel
+		• Message passing to move data between nodes
+		• Hard to program
+		• Best end result
+	– Parametric computing
+		• If a problem is a repeated execution of algorithm on different sets of data
+		• e.g. simulation using different scenarios
+		• Needs effective tools to organize and run
+• The increase in performance with the increased number of cores depends on a few factors including:
+	– Amount of sequential portions in the codes
+• Parts of the codes that must be executed sequentially
+	– Overhead to support the cores
+• Overheads are required to monitor and control the various threads/processors that are executed across all cores.

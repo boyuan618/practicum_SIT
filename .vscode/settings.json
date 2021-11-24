@@ -1,6 +1,8 @@
 {
   "python.pythonPath": "C:\\Users\\Boyuan\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
   "files.associations": {
-    "string.h": "c"
+    "string.h": "c",
+    "stdio.h": "c",
+    "stdlib.h": "c"
   },
 }
