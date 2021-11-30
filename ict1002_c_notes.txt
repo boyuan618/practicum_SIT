@@ -1,0 +1,58 @@
+compiler converts program into machine code that is executed by the CPU
+
+editor -> preprocessor -> compiler -> linker -> loader -> cpu
+
+* -> pointer
+& -> address
+
+if variable is a pointer, i.e. declared with a *, need to use * again to assign value, i.e. *p = 2 whereas p = pointer
+if variable is a refrence, i.e. address declared with &, need to use & to assign value, i.e. &p = 2 whereas p = address of variable p in memory
+
+Data types
+
+int %d
+long %ld
+float %f
+double %lf
+char %c
+void (theres nothing)
+
+To change data types, use casting: (new type)variable, e.g., where int x = 5, (char)x
+
+Formatters
+%c char
+%s string
+%d integer
+%x hex
+%ld long
+%f 1.dp
+%lf 2d.p
+
+
+switch -> used to check if one variable has many different cases
+
+
+typedef struct {
+} type_name;
+
+type_name test;
+
+
+Linked list is made of nodes, each node is a struct with data and a pointer to next node.
+Head is always maintained.
+
+Malloc-> allocates a block of memory with given no of bytes
+Calloc ->allocates memory with space for given no of elements, set to zero.
+
+When using malloc or calloc, the memory must be freed, else memory leak occurs where more and more mem is used over time.
+free(var)
+
+File ends with EOF marker -> there is a EOF constant
+
+open file-> fopen(f)
+read -> fscanf(f) or fread()
+***move to specific location -> fseek(f, how far down, start), ###only in binary files
+write->fprintf(f) or fwrite()
+remember to close file-> fclose(f)
+
+***feof(f) is true if pointer is at EOF
