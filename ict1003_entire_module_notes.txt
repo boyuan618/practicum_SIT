@@ -251,7 +251,7 @@ Large, complex software should be decomposed into several less complex modules.
 	- Modules that are general can be re-used in other projects.
 
 Characteristics of a good software module:
-	- Loose coupling –datawithin module is entirely independentof other modules.
+	- Loose coupling –data within module is entirely independent of other modules.
 	- Strong modularity – should perform a singlelogically coherent task.
 
 
@@ -620,7 +620,7 @@ Speed of Hard Disk
 		– Time required to transfer the required data after the head is positioned
 	• The rotational delay, TR, is dependent on the rotational speed of the disk (commonly denominated in Revolutions Per Minute, RPM)
 	• For calculations, RPM is usually converted to Revolutions Per Second, RPS where: RPS = RPM/60
-	• For a random section, Avg. Rotational delay, TR = 0.5 /RPS seconds  (0.5 for half a revolution) 
+	• For a random section, Avg. Rotational delay, TR = 0.5 /RPS seconds  (0.5 for half a revolution)  *******
 	• The Transfer Time, TT, is also dependent on the rotational speed of the disk, as well as the Track Density, DT (number of sectors per track),
 	Sector Density, DS (number of bytes per sector) and the number of bytes for the transfer N. Transfer Time, TT = N / (RPS x DT x  DS)
 
@@ -749,6 +749,8 @@ The Page Table
 • Control bits for each entry include:
 	– Valid bit: Indicates if a page is in the main memory
 	– Modified bit: Indicating if the page in memory has been modified and needs to be copied-back to the disk upon swapping out.
+
+Physical Address = Frame No * Frame Size + Offset ************************
 
 Virtual Memory Considerations - Trashing
 • Trashing is a condition that occurs when the operating system spends nearly all of its time doing swapping.

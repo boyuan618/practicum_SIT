@@ -1,0 +1,111 @@
+Software Engineering
+
+Emphasis on product, process, quality
+
+SDLC: implementation only 10-20% of time spent (Waterfall model)
+	1. Planning
+	2. Analysis
+	3. Design
+	4. Implementation
+	5. Testing & Integration
+	6. Maintenance
+
+1. Planning
+-Scope, resource, cost, time, benefits
+
+2. Analysis
+-Requirement, management plan, specification document
+
+3. Design
+- Architectural/ Detailed Design.
+
+4. Implementation
+-Coding
+
+5. Testing and Deployment
+- Unit testing etc
+
+6. Maintenance
+- Corrective, Adaptive, Preventive, Perfective
+
+Easy to follow, provide structure, set targets, only used for mature products
+
+
+Sprial model
+-4 phases that are done in iterations, which could be long
+-Emphasis on risk analysis, combining planning and documentation with prototyping
+
+
+Good Software key points
+1. Maintainability
+2. Dependabiility and security
+3. Efficciency
+4. Acceptability
+
+
+UML Diagrams
+- Shows the interactions between users and systems (E.g. Cashier system has cashier and customers interacting with it)
+
+•Actor
+	- Refers to a particular role of a user of the system
+	- Similar to external entities; they exist outside of the system
+•Boundary
+	- which defines the system of interest in relation to the world around it.
+	- Use cases in the boundary, i.e the box
+	- Actors outside the boundary
+•Use case symbols
+	- An oval indicating the task of the use case
+•Connecting lines (relationships)
+	- Arrows and lines are used in diagram for behavioral relationships
+	- Depicts a usage relationship (Actor using a function)s
+
+DFD
+Process: any process that changes the data, producing an output
+Data Store: files or repositories that hold information for later use, such as a database table or a membership form.
+Data Flow: the route that data takes between the external entities, processes and data stores
+
+•The data flow diagram must have only ONE process
+•Must not have any freestanding objects
+•A process must have both an input and output data flow.
+•A data store must be connected to at least one process.
+•External entities should not be connected to one another.
+
+
+ER Diagram
+Entity -> Rectange (i.e. the variable)
+Attribute -> Oval
+Key -> Underline (if it is the PKEY)
+Relationship -> Diamond (Used to connect 2 or more entities)
+
+
+CIA
+-Confidentiality: Information is only disclosed to those with the rights to know
+-Integrity: Information is correct and not manipulated in any way
+-Availability: Information is accessible and usable at all time.
+
+
+Attacks
+•Social Engineering
+	–Phishing,  Spear Phishing, Vishing, Smishing,  Mining Social Media, Man-In-The-Middle Attack,  Man-In-The-Browser Attack
+•Malware
+	–Virus, Worm, Trojan Horse, Spyware
+		-Virus: infects a host computer and spreads embed itself within another program or file
+		-Worm: Autonomous program that transfers itself through a network, taking up residence in computers and forwarding copies of itself to other computers
+		-Trojan: Program that enters a computer system disguised as a desirable program with harmful effects
+		-Spyware: Collects information about activities on computer and reports back to instigator of attack
+		-Adware: A form of malware that hides on your device and serves you advertisements
+		-Ransomware: Encrypts a victim’s files and demands a ransom from the victim to restore access to the data upon payment
+•Denial Of Service (DOS)
+	- Overload Computer until unable to process request
+•Botnets
+•Spam
+
+
+Protection
+•Firewall
+•Proxy Server
+•Network Auditing Software
+•Anti-Virus
+•Secured Connection – SSL
+•Authentication
+•Cryptography
