@@ -1,0 +1,144 @@
+p -> q
+converse: q -> p
+contrapositive: ~q -> ~p
+inverse: ~p -> ~q
+
+*** P -> Q === P only if Q
+*** Q -> P === P if Q
+
+truth table
+rows: 2^number of unique elements
+
+D.N.F = Take all True results from truth table and make all elements true
+(e.g. row in truth table is T T F T, then it will be a^b^~c)
+***DNF is and(^) between the elements and or(V) between the rows
+(e.g. T T F T and T F T T would be (a^b^~c)V(a^~b^c)
+
+C.N.F = Take all False results from truth table and make all elements false
+(e.g. row in truth table is F F T F then it will be aVbV~c)
+*** CNF is or(V) between elements and and(^) between rows
+(e.g. F F T F and F T F F would be (aVbV~c)^(aV~bVc)
+
+***For both DNF and CNF, negation should only be on the element itself
+*** From DNF to CNF can use distributive law
+
+
+Formalising arguements
+(e.g. All lectures are boring. P(x): x is lecturer, Q(x) x is boring.
+∀x(P(x) -> Q(x)): for all x, if x is lecturer then x is boring)
+
+Prove one is a subset of other
+A ∩ B = B - (B - A)
+
+A - B = {1,2,3} when A={1,2,3,4,5} and B={4,5,6,7,8}
+
+|P(A)| =  cardinality of the power which is 2^(number of elements in set)
+
+
+Function f: A -> B
+assignment of each element of A to exactly one element of B
+A is domain of f
+B is codomain of f
+i.e. f(a) = b, b is image of a under f and a is preimage of b
+
+Range of f is set of all images under f, i.e. f(A)
+
+function: each input is related to exactly one output
+functions are same if they have same domain, same codomain and map
+
+empty set is always a subset of all set
+
+P(set) is power set, which is a set of all possible subsets, where is size is 2^(size of set)
+
+|set|, the absolute is the size of the set.
+
+one to one (injective) each element in b has at most one connection
+onto (surjective) each element in b has at least one connection
+bijection if each element in b has exactly one connection
+
+tuple -> ordered collection
+set -> unordered collection
+ordered pair -> 2 tuples
+
+Cartesian product -> A x B = {(a,b)| a∈A ^ b∈B}
+
+Binary relation -> A subset of the cartesian product
+
+Relations
+
+Reflexive if every element of A is in the relation with itself
+symmetric if it is always ok to swap the order
+Antisymmetric, true is (a,b) and (b,a) are not in relation, and if (a,b) and (b,a) are in the relation, a == b must be true for it to be antisymmetric.
+Transitive, can always skip a step, i.e. (x,y) and (y,z) -> (x,z)
+
+equivilance relations are relations in a set that satisfy reflexive, symmetric and transitive
+equivilance classes are subsets of numbers that when formed together as a relation satisfies the requirements.
+
+simple graph -> no loops or parallels
+Sum of all degrees of vertices in a graph is always twice the number of edges in the graph
+Total degree of graph = 2(number of edges)
+
+
+tree is a connected graph that does not contain any circuits
+tree with n vertices has n-1 edges
+vertices(dots), edges(lines)
+
+leaf (vertex of degree 1)
+branch (vertex of degree greater than 1)
+
+descriptive statistics - data to describe or reach conclusions about that same group only
+inferential statistics - sample data from a small group to reach conclusions of the larger population where sample is from
+
+population -> entire population, usually large and expensive
+sample -> a small subset of population, usually used to represent the larger population
+
+Mean ->  Sum of all data/ number of data *** if from frequency table remember to multiply the frequency to the value 
+Median -> middle data value when the dataset is ordered in ascending order. (No calculations needed)
+Mode -> Data with the highest frequency
+
+Interquartile range is 25% to 75% -> sort data, find median then find median of first half and second half
+
+population variance -> o^2 
+population standard deviation -> square root(o^2)
+
+sample variance -> s^2
+sample standard deviation -> square root(s^2)
+**combined standard deviation -> s^2 combined = (1/(n1+n2))(n1[s1^2+(mean1-meancombined)^2] + n2[s2^2+(mean2-meancombined)^2])
+
+
+Classical probability -> All random outcomes are equally likely
+Relative probability -> Probability assigned to an outcome is the proportion of times would occur in the long run
+Subjective probability -> assigned based on a person's belief of the likelihood that it will occur
+
+random variable -> a value that follows some probability distribution, subject to some randomness or chance
+
+discrete random variable -> can find probabilities with exact outcome, from countable list
+continuous random variable -> limited to finding probabilities for intervals of values, from interval or colellection of intervals
+
+frequency distribution -> represents discrete data variables
+probability distribution -> represents disccrete random variables
+
+Law of large numbers -> as the number of trials increase, the mean outcome will tend to become the expected value
+
+
+Conditions for binomial random variable:
+1. Finite number of trials
+2. only 2 outcomes
+3. Fixed number of trials
+4. Probability of sucess or failure is constant
+
+probability density function -> f(x) = p
+
+sample standard dev = pop standard dev/sqrt(sample size)
+unbiased point esimate for mean same formula
+for unbiased variance must use n-1 formula (x-u) one, not the var(x) one
+
+Two characteristics that are valuable in a point estimator:
+	1. The sampling distribution of the point estimator should be centered over the true value of the parameter to be estimated.
+	2. The spread (as measured by the variance) of the sampling distribution should be as small as possible.
+
+point estimate-> area in between, the x-zs/root(n) < u< x+zs/root(n) formula
+
+alpha = 1- confidence level
+
+***if size is <30 use t table, if size > 30 use z table

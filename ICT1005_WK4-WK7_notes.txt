@@ -14,14 +14,18 @@ i.e. f(a) = b, b is image of a under f and a is preimage of b
 
 Range of f is set of all images under f, i.e. f(A)
 
+function: each input is related to exactly one output
 functions are same if they have same domain, same codomain and map
 
 empty set is always a subset of all set
 
+P(set) is power set, which is a set of all possible subsets, where is size is 2^(size of set)
 
-one to one (injective) if and only if no two elements in the domain have the same image
-onto (surjective) if and only if for every element b in B there is an element a in A with f(a) = b
-bijection if it is injective and surjective
+|set|, the absolute is the size of the set.
+
+one to one (injective) each element in b has at most one connection
+onto (surjective) each element in b has at least one connection
+bijection if each element in b has exactly one connection
 
 tuple -> ordered collection
 set -> unordered collection
