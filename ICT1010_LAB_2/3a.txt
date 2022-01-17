@@ -1,0 +1,27 @@
+A->B = yes
+A->C=no
+B->C=no
+they are in a different network
+Default vlan is vlan 1
+Ports assigned to default vlan Fa0/1-24, G0/1-2.
+A->B=yes, as they are in the same vlan
+
+vlan f0/24 is now associated with vlan 1, the default vlan
+vlan 30 default name is VLAN0030
+traffic to f0/24 just do not go through and are dropped
+f0/24 is now assigned to vlan 1, the default vlan
+This is as traffic directed to the port not reassigned would continue attempting to go to a vlan that does not exist. Since the vlan does not exist, 
+the traffic is dropped and simply stops there.
+
+A->B=yes
+A->C=no
+B->C=no
+As PC C is in a different vlan
+
+Trunking mode is used as dtp is a serious security risk and an attacker can use dtp to form a trunk with out switch
+
+
+Reflection 
+1. A layer 3 device like a layer 3 switch or router
+2. Proper segmentation of network for better cybersecurity, reduce IT costs
+

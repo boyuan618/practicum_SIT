@@ -1,0 +1,22 @@
+PCA OUI: EC-F4-BB
+SERIAL-NO: 60-40-B1
+VENDOR: INTEL
+
+PCB OUI: 40-B0-34
+SERIAL-NUMBER: 54-90-4D
+VENDOR: REALTEK
+
+S1 MAC: 00-AF-1F-B9-BE-80
+S1 F0/6 MAC: 00-AF-1F-B9-BE-86
+S1 G0/1 MAC: 00-AF-1F-B9-BE-99
+
+S2 MAC: 00-38-DF-50-44-00
+S2 G1/0/18 MAC: 00-38-DF-50-44-12
+S2 G1/0/24 MAC: 00-38-DF-50-44-18
+
+Mac-Address FF-FF-FF-FF-FF-FF is used for broadcast.
+Mac-Addess 01-80-C2-00-00-00 is used as a multicast address to distribute information to its network
+
+ping success from PCA to PCB
+PCA: Yes, there are dynamic addresses. [(EC-F4-BB-60-40-B1,F0/6),(40-B0-34-54-90-4D, G0/1)]
+PCB: [(40-B0-34-54-90-4D, G1/0/18),(EC-F4-BB-60-40-B1,g1/0/24)]

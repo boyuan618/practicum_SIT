@@ -1,0 +1,4 @@
+Cisco IOS version 15.2(2)E5
+System image filename: flash:/c2960x-universalk9-mz.152-2.E5/c2960x-universalk9-mz.152-2.E5.bin
+Problem: Invalid input detected
+yes
