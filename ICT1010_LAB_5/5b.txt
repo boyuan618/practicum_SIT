@@ -1,0 +1,17 @@
+7. A-> C: yes
+9a. yes
+9b.yes
+Path for A: 192.168.1.1 -> 209.165.200.225
+Path for C: 192.168.1.1 -> 209.165.200.225
+
+2b. Request time out
+2c. No, Still pinging
+3c. D1, 0000.0c9f.f001, 150, 192.168.1.254
+3e. 192.168.1.254
+3f. yes
+4b. request time out then can ping again
+5a. D3, Back to D1 as it has lower priority
+6a. D1, standby 1 preempt 
+
+Reflection: It allows the network to still be able to function as normal even if some part of the network experiences failure
+ 

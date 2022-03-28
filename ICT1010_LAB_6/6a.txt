@@ -1,0 +1,9 @@
+3a. 192.168.1.20= 192.31.7.1
+3b. Port 1
+6a. 192.168.1.21 = 192.31.7.1
+6b. port 1
+6c. tcp, 80, 192.168.1.21, 192.31.7.1, 80 and http
+
+Reflection
+1. To allow for less ip addresses to be used
+2. Causes loss of end-to-end IP traceability

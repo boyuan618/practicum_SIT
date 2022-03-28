@@ -1,0 +1,28 @@
+5a. yes, yes
+5b. yes
+5c. no, no, no, because there are no static routes
+6a. 3 
+6b. 4
+6c. Everything in R3,PC-C is not there
+6d.Everything in S2, PC-A is not there
+6c. Because they have not been configured statically yet
+
+Part 3
+1b.  S    192.168.1.0/24 [1/0] via 10.1.1.2
+2b. S     192.168.0.0 is directly connected, GigbitEthernet0/0
+2c. no
+3c. S	198.133.219.0/24 [1/0] via 10.1.1.2
+	209.165.200.0/27 is subnetted, 1 subnets
+S	209.165.200.224 [1/0] via 10.1.1.2
+
+3d. no
+4b. 5, no
+
+5b. S*	0.0.0.0/0 [1/0] via 10.1.1.2, 10.1.1.2 to network 0.0.0.0
+5c. no
+5d. no
+
+Reflection
+1. ip route 
+2. smaller routing table
+3. establish fowarding row for packets when no specific address for next-hop is available from routing table

@@ -1,0 +1,261 @@
+Private ip range: 10.0.0.0 — 10.255.255.255; 172.16.0.0 — 172.31.255.255; 192.168.0.0 — 192.168.255.255
+
+Private addresses and Network Address Translation (NAT) as an interim solution for
+IPv4 address exhaustion.
+
+Network Address Translation (NAT) to translate private IP addresses (not valid in
+Internet) to public IP addresses (valid in Internet).
+NAT is typically implemented at edge router to change the packet’s source private IP address
+with the router’s public IP address, and vice versa
+
+Types of NAT:
+1. Static NAT -> one-to-one mapping of private IP address and public IP address statically
+2. Dynamic NAT -> pool of available addresses assigned dynamically, ip returned when not used
+3. Port Address Translation (PAT) or NAT pool overload -> support many local hosts concurrently with only one or few public IP addresses
+
+1. Static NAT
+- usually deployed to allow access to inside servers from the outside Internet (limited inside ips)
+- Static NAT translation table
+	-> Entries (static NATs), are immediately updated into the NAT translation table
+	->  outside hosts are able to initiate a connection to inside hosts with private IP
+- ip nat inside source static 10.1.1.1 200.1.1.1
+
+2. Dynamic NAT
+- NAT pool addresses are allocated on a first-come-first-serve basis, and once all are used, other inside hosts will temporary not be able to access the Internet.
+- No entry is added into NAT table which will prevent outside hosts from initiating connection to inside hosts with private IP. In addition, only inside hosts are able to initiate connections to outside hosts.
+- access-list 1 permit 10.1.1.0 0.0.0.255 (wildcard)
+  ip nat pool name 200.1.1.1 200.1.1.5 netmask 255.255.255.248
+  ip nat inside source list 1 pool name
+
+3. Port Address Translation (PAT)
+- PAT is controversial as it requires layer-3 router to be enhanced with capability to read/amend 16-bit port number at layer-4 transport layer header.
+- No entry is added into NAT table after configuring PAT, thus preventing outside hosts are initiating connection to inside hosts.
+- When inside hosts initiate connections to outside hosts, entries will be added into NAT table, thus allowing returning packets. Note the use of same IP address but different port numbers to support different inside hosts concurrently.
+- access-list 1 permit 10.1.1.0 0.0.0.255
+  ip nat pool name 200.1.1.1 200.1.1.5 netmask 255.255.255.248
+  ip nat inside source list 1 pool name overload
+
+
+ARP
+- for source host or routers to resolve target IP address to target MAC address
+- Conversation:
+	1. consists of an ARP request (broadcast) for a MAC address corresponding to a requested target IP address
+	2. host or routers with the matching target IP address will then respond with an ARP reply (unicast) with the corresponding MAC address
+
+-ARP cache
+	- containing recent mappings of IP address/MAC address
+- In summary, as the IP packet is carried hop-by-hop from source to destination, the destination IP remains the same, but the destination MAC address changes.
+
+
+ICMP
+- enables IP to report error or perform query but not to make IP reliable
+-  ICMP messages may be classified into error-reporting and query messages
+
+- The ping troubleshooting tool that you’ve been using in the labs to test the connectivity of a host or router is in fact implemented using ICMP echo/reply messages.
+- You may have noticed that sometimes the first ping failed. This is due to ARP table not having the MAC address initially.
+
+Extended ping
+- you may also issue an extended ping which allows you to select other interface IP of the router as the source IP of the ping message
+
+-----------------------------------------------------------------------------------------------LEC 7 -----------------------------------------------------------------------------------
+
+Routing Protocol
+- A Routing protocol specifies how routers communicate with each other
+- A router automatically learns the routes to other subnets or networks with the use of routing protocol at the control plane.
+- Router can be compromised of 2 planes: Control and Data planes
+
+Control Plane
+- controls the behavior of data plane; e.g. deriving and updating the routes which will affect how the data plane forwards the packets.
+- Controls routing
+
+Data plane
+- forwards packets based on the forwarding/routing table.
+- Controls forwarding
+
+Two approaches to structuring network control plane:
+• per-router control (traditional)
+• logically centralized control (software defined networking)
+
+Broadly, routing protocols are classified into two major categories: 
+- interior gateway protocol (IGP) (for single autonomous system)
+- exterior gateway protocol (EGP) (for different AS, inter-domain)
+
+Autonomous system
+An autonomous system (AS) is a group of routers under the administration of a single authority, where each AS is identified by a unqiue AS number
+assigned by iana.
+
+Dynamic routing
+Routing protocol goal: determine “good” paths (equivalently, routes), from sending hosts to receiving host, through network of routers
+- path: sequence of routers packets traverse from given initial source host to final destination host
+- good: least cost, fastest, least congested
+
+OSPF
+OSPF is an interior gateway dynamic routing protocol based on
+Link State Routing
+- Link state Metric:
+	- minimum delay (rtt),
+	- maximum throughput, reliability, etc..
+- Uses Dijkstra Algorithm to compute the routing tables
+
+
+The configuration of router ID is optional and is determined in order of precedence as follows:
+1. If the optional router-id OSPF subcommand is configured, this value is the router ID:
+2. Else if the loopback interfaces of the router is configured with IP addresses, the highest IP address among these is the router-id;
+3. Else among the IP addresses configured on the physical router interfaces, the highest IP address among these is the router-id.
+
+Single-area OSPF -> small network
+multi-area OSPF -> large networks, normally with 50 or more routers (OSPF defined by area id)
+
+For security and to avoid wasting bandwidth sending Hello messages, interfaces that have no neighboring router are recommended to be configured
+as passive interface.
+
+3 Phases of OSPF*** (Discover, learn, compute)
+1. Discover adjacent neighbors by multicasting Hello message
+2. Advertise and learn network topology by exchanging link state advertisements (LSAs) :
+	- When requested;
+	- When link state changes, e.g. goes up or comes down
+	- When aging timer expires, default is 30mins
+3. Compute shortest path to other subnets by running Dijkstra’s algorithm on the LSDB
+
+Step 1:
+- multicast a Hello message to neighboring routers to announce its presence in the network. After reply received, transit to 2-way state. 
+(OSPF must be enabled with command and interface must be indirectly enabled with network command  with the same network as the interface)
+
+Step 2:
+Every OSPF router maintains a link state database (LSDB) which initially only contains link state advertisements (LSA) about the subnets 
+directly connected to it and costs. OSPF router will start exchanging route information using DD, LSR and LSU messages and transit to loading and 
+then full state when done in Phase 2. 
+
+**(Database description (DD) : summary list of available LSA, not details
+      Link state request (LSR) : asking for LSA it does not have
+      Link state update (LSU) : send LSU containing required LSA
+      Based on priority then router id, highest router will be the default desginated one and the second highest would be the backup.
+      Note: After election, new routers will not take over even if they have higher priority)
+
+Step 3:
+With the LSDB fully updated, each router can proceed to use Dijkstra’s algorithm to compute the shortest path from itself to other subnets.
+Finally, each router will use the result of Dijkstra’s algorithm to update its routing table. The default interface cost is computed based on the
+formula below which can be changed to influence the result of Dijkstra’s algorithm
+
+-------------------------------------------------------------------------------Lec 8 SDN -------------------------------------------------------------------------------------
+SDN: Centralized Control
+The controller 
+- is a centralized “brain” in the network
+- will have a global view of
+	• all the network devices,
+	• their interconnections, and
+	• the best paths between hosts
+- network no longer has to converge, through multiple devices (e.g., swapping routing tables) in the network before they update their routing
+tables and then recalculate the preferred routes.
+- time to converge in an SDN network is as follows:
+	- The time to detect a failure + the time to announce a failure to all devices + the time to run the algorithm 
+	   + the time to update the databases in each device
+
+Benefits:
+- easier network management: avoid router misconfigurations, greater flexibility of traffic flows
+- table-based forwarding allows programming of routers
+- foster innovation
+
+SDN Data-plane switches: 
+- fast, simple, commodity switches implementing generalized data-plane forwarding (Section 4.4) in hardware
+- flow (forwarding) table computed, installed under controller supervision
+- API for table-based switch control, defines what is controllable, what is not
+- protocol for communicating with controller (e.g., OpenFlow) 
+
+SDN Controller (network OS)
+- maintain network state information
+- interacts with network control applications “above” via northbound API
+- interacts with network switches “below” via southbound API
+- implemented as distributed system for performance, scalability, fault-tolerance, robustness
+
+Distributed controller architecture
+• Physically separated, logically centralized
+• Easier to scale
+• Increased availability and hence improved resilience
+• Well suited considering geographical perspective
+
+SDN network-control apps
+- implement control functions using lower-level services, API provided by SDN controller
+- can be provided by 3rd party: distinct from routing vendor, or SDN controller
+
+Summary
+- interface layer to network control apps: abstractions API
+- network-wide state management : state of networks links, switches, services: a distributed database 
+- communication: communicate between SDN controller and controlled switches
+
+OpenFlow protocol
+- operates between controller, switch
+- TCP used to exchange messages
+	• optional encryption
+- three classes of OpenFlow messages:
+	• controller-to-switch
+	• asynchronous (switch to controller)
+	• symmetric (misc.)
+- distinct from OpenFlow API
+	• API used to specify generalized forwarding actions
+
+Key controller-to-switch messages
+- features: controller queries switch features, switch replies
+- configure: controller queries/sets switch configuration parameters
+- modify-state: add, delete, modify flow entries in the OpenFlow tables
+- packet-out: controller can send this packet out of specific switch port
+- packet-in: transfer packet (and its control) to controller. See packet-out message from controller
+- flow-removed: flow table entry deleted at switch
+- port status: inform controller of a change on a port.
+
++ An OpenFlow enabled switch communicates to an external controller over a secure OpenFlow channel
++ Lookup and packet forwarding is done according to one or more flow tables, group table, meters
+
+SDN interaction steps:
+1. S1, experiencing link failure uses OpenFlow port status message to notify controller
+2. SDN controller receives OpenFlow message, updates link status info
+3. Dijkstra’s routing algorithm application has previously registered to be called when ever link status changes. It is called.
+4. Dijkstra’s routing algorithm access network graph info, link state info in controller, computes new routes
+5. link state routing app interacts with flow-table-computation component in SDN controller, which computes new flow tables needed
+6. controller uses OpenFlow to install new tables in switches that need updating
+
+-------------------------------------------------------------------------Lec 9 TCP & UDP------------------------------------------------------------------------------------------
+
+Overview:
+- Transport layer is concerned with process-to-process communications between
+sender and receiver.
+	-To distinguish processes, port numbers are used.
+- Transport layer protocols:
+	- UDP (User Datagram Protocol)
+	- TCP (Transmission Control Protocol)
+- UDP provides unreliable service by only implementing:
+	- Process-to-process delivery of data
+- TCP provides reliable service by also implementing:
+	- Connection management
+	- Flow control
+	- Error control
+	- Congestion control 
+
+UDP - User Datagram Protocol
+	• unreliable, connectionless
+	• datagram oriented
+	• simple
+- meant to provide fast but unreliable service, and the only service it provides is to add the use of port number for process-to-process communication.
+- provides datagram or connectionless service because each application layer’s message is sent as a datagram directly without the need to establish a
+connection
+
+TCP - Transmission Control Protocol
+	• reliable, connection-oriented
+	• stream oriented
+	• complex
+- meant to provide reliable service over unreliable IP and typically unreliable data link as well.
+- provide stream service because application layer messages are sent as a continuous byte stream, which is then broken by TCP into segments before
+sending out.
+
+To provide reliable service, TCP implements:
+	1. Connection management – to establish connection between sender and receiver before transmission of application layer messages
+	2. Flow control – to prevent sender from transmitting too fast and overflowing the receiver’s buffer
+	3. Error control – to enable sender to detect and correct errors in transmissions, typically by retransmission
+In addition, to be a considerate user of the Internet, TCP implements:
+	4. Congestion control – to limit sender from sending too much if the network is already congested
+
+Refer to slides:
+1. TCP Connection Management
+2. TCP Flow Control
+3. TCP Error Control
+4. TCP Congestion Control
