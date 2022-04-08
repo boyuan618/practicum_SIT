@@ -1,0 +1,238 @@
+Things to note: 
+1. All connected Interfaces and PCs should be in same network in order to ping unless something else is configured
+2. All PCs should have their firewall and wifi disabled.
+3. ping and tracert are useful for troubleshooting
+
+
+Basic start commands:
+	erase start
+	reload
+	sh run
+	sh start
+	sh flash
+	sh ip int bri
+	sh int stat
+	copy run start 
+	en
+	conf t
+	hostname {Name}
+	no ip domain-lookup
+	banner motd #
+	end
+	
+	
+Clear Mac Address Table:
+	sh mac address-table
+	clear mac address-table dynamic
+
+
+Vlans:
+	vlan {Number}
+	name {Name}
+	
+	int (range if multiple int) {interface number}
+	switchport m a
+	switchport a vlan {Number}
+	no shut
+	
+	sh vlan bri
+	
+	no switchport a vlan (to remove int from vlan)
+	
+	no vlan {Number} (to delete a vlan)
+	
+	
+.1Q trunk:
+	int {interface number}
+	switchport mode dynamic desirable
+	no shut
+	
+	sh int trunk 
+	
+	int {interface number}
+	switchport mode trunk 
+	no shut
+	
+
+PAgP Etherchannel
+	1st switch:
+		int range {interface numbers}
+		channel-group 1 mode desirable
+		no shut
+		exit
+		
+		int port-channel 1
+		switchport mode trunk
+		exit
+	
+	2nd switch:
+		int range {interface numbers}
+		channel-group 1 mode auto
+		no shut
+		exit
+		
+		int port-channel 1
+		switchport mode trunk
+		exit
+	
+	sh run int {interface number} {switchport (if want check switchport)}
+	sh etherchannel summary
+	
+
+LACP Etherchannel
+	1st switch:
+		int range {interface numbers}
+		switchport mode trunk
+		channel-group 2 mode active (1 active 1 passive)
+		no shut
+	
+	2nd switch:
+		int range {interface number}
+		switchport mode trunk
+		channel-group 2 mode passive
+		no shut
+		
+
+Spanning-Tree STP
+	sh spanning-tree
+	
+
+Loopback interface (router)
+	interface lo0
+	ip address {ip} {netmask}
+
+
+Enable routing (router and layer 3 switch)
+	ip routing
+
+.1Q inter-vlan
+	int g0/1.10
+	encapsulation dot1q 10
+	ip address {ip} {netmask}
+	no shut
+	
+	int g0/1
+	no shut
+	
+
+Static route
+	Recursive:
+		ip route {destination network address} {subnet mask} {ip-address of next hop}
+	
+	Directly Connected:
+		ip route {destination network address} {subnet mask} {exit-interface}
+		
+
+Default Route:
+	ip route 0.0.0.0 0.0.0.0 {next-hop ip OR exit-interface}
+	
+
+HSRP
+	1st Router:
+		int vlan 1
+		standby version 2
+		standby 1 ip {ip address}
+		standby 1 priority 150
+		standby 1 preempt
+		
+	2nd Router:
+		int vlan 1
+		standby version 2
+		standby 1 ip {ip address}
+		
+	show standby
+	show standby bri
+	
+
+NAT
+	Gateway:
+		ip route 0.0.0.0 0.0.0.0 {Outside ip address given}
+		
+	Static NAT
+		Gateway:
+			ip nat inside source static {inside private ip} {outside public ip}
+			
+			int {interface connected to private network}
+			ip nat inside 
+			
+			int {interface connected to public internet}
+			ip nat outside
+			
+		sh ip nat translations
+		sh ip nat statistics
+		
+		clear ip nat translations * (to clear)
+		clear ip nat statistics (to clear)
+	
+	Dynamic NAT
+		Gateway:
+			access-list 1 permit 192.168.1.0 0.0.0.255
+			ip nat pool public_access {start of public ip} {end of public ip} netmask {netmask}
+			ip nat inside source list 1 pool public_access
+
+
+NAT Pool Overload and PAT
+	Gateway:
+		ip route 0.0.0.0 0.0.0.0 {Outside ip address given}
+	
+	NAT Pool Overload:
+		Gateway:
+			access-list 1 permit 192.168.1.0 0.0.0.255
+			ip nat pool public_access {start of public ip pool} {end of public ip pool} netmask {netmask}
+			ip nat inside source list 1 pool public_access overload
+			
+			int {interface connected to private network}
+			ip nat inside 
+			
+			int {interface connected to public internet}
+			ip nat outside
+			
+	
+	PAT
+		Gateway:
+			access-list 1 permit 192.168.1.0 0.0.0.255
+			int {interface connected to private network}
+			ip nat inside 
+			
+			int {interface connected to public internet}
+			ip nat outside
+			
+			ip nat inside source list 1 int {outward facing interface} overload
+	
+
+OSPF
+	sh ip ospf neighbor
+	sh ip protocols
+	sh ip ospf
+	sh ip ospf int
+	
+	1st router:
+		router ospf 1
+		network {network address} area 0
+		router-id 11.11.11.11
+		passive int {interface}
+		auto-cost reference-bandwidth 100
+		
+		int g0/0
+		bandwidth 128
+	
+	2nd router:
+		router ospf 1
+		passive-interface default
+		no passive-interface g0/0
+		
+		
+
+The OSPF router ID is used to uniquely identify the router in the OSPF routing domain. Cisco routers derive
+the router ID in one of three ways and with the following precedence: 
+1) IP address configured with the OSPF router-id command, if present 
+2) Highest IP address of any of the router’s loopback addresses, if present 
+3) Highest active IP address on any of the router’s physical interfaces 
+
+The passive-interface command prevents routing updates from being sent through the specified router
+interface.
+
+Because the OSPF cost metric must be an
+integer, all links with transmission speeds of 100Mb/s or higher have a cost of 1. This results in Fast Ethernet,
+Gigabit Ethernet, and 10G Ethernet interfaces all having the same cost. Therefore, the reference-bandwidth
+must be changed to a higher value to accommodate networks with links faster that 100Mb/s. 

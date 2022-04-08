@@ -1,0 +1,92 @@
+!
+version 15.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R2
+!
+!
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 192.168.1.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1.11
+ encapsulation dot1Q 11
+ ip address 10.10.11.1 255.255.255.0
+ standby 1 ip 10.10.11.254
+ standby 1 priority 150
+ standby 1 preempt
+!
+interface GigabitEthernet0/1.22
+ encapsulation dot1Q 22
+ ip address 10.10.22.1 255.255.255.0
+ standby 1 ip 10.10.22.254
+ standby 1 priority 150
+ standby 1 preempt
+!
+router ospf 1
+ log-adjacency-changes
+ network 192.168.1.0 0.0.0.3 area 0
+ network 172.27.47.0 0.0.0.7 area 0
+ network 10.10.11.0 0.0.0.255 area 0
+ network 10.10.22.0 0.0.0.255 area 0
+ network 192.168.1.4 0.0.0.3 area 0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+
