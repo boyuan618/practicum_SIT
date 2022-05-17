@@ -59,6 +59,9 @@ Extended ping
 
 -----------------------------------------------------------------------------------------------LEC 7 -----------------------------------------------------------------------------------
 
+Fragementation -> offset is always = position of bit / 8, e.g. 1400/8
+all fragments except the last must be a multiple of 8
+
 Routing Protocol
 - A Routing protocol specifies how routers communicate with each other
 - A router automatically learns the routes to other subnets or networks with the use of routing protocol at the control plane.
