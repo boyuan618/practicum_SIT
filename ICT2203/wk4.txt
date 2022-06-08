@@ -1,0 +1,9 @@
+Lab 3 Exercise 3 ( IP address spoofing and Mac address spoofing, with IP source guard as defense )
+
+Attacker only start receiving frames if server mac-address table is changed to point to the port that the attacker is at.
+
+IPSG require dhcp snooping binding table in order to retrieve the ip and mac to achieve its validation.
+
+
+Lab 4 Exercise
+

@@ -1,0 +1,8 @@
+DHCP starvation attack
+
+1. Port security is insufficient, packet can be designed where MAC is fixed, but the dhcp request has a different mac address each time to flood.
+2.
+
+
+Project
+Part 1 and 2, mainly graded on part 1. About the theortical skills, practical skill and programming. 
