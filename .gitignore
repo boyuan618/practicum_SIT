@@ -5,3 +5,6 @@
 /ICT1004_LAB_6 - Copy/nbproject/private/
 /ICT1004_LAB_7(wk09)/nbproject/private/
 /ICT1004_LAB_7_wk09/nbproject/private/
+*.vmdk
+*.ovf
+ICT1010/ICT1010_indiv_project/floodlight-vm.zip
