@@ -1,0 +1,132 @@
+LAB 1
+
+MAC flooding
+- use macof command
+- when switch address-table is full, all frames are broadcasted
+- only unicast addresses will work (8th bit of MAC is 0)
+- need to flood for at least 300s for old entries to be removed (aging-time)
+- to block, enable port security (maximum) to limit MAC per end device
+
+Switch spoofing / VLAN hopping
+- use yersinia command -> DTP -> enable trunking
+- form 802.1Q trunk to receive all frames from all configured VLANs
+- should be used with MAC flooding to receive all frames
+- vulnerable switches using DTP (dynamic auto / dynamic desirable)
+- to block, shutdown all unused ports or move them to unused & removed VLAN (removing prevents trunk from carrying frames from the VLAN)
+===
+
+LAB 2
+
+Double frame tagging
+- use yersinia command -> 802.1Q -> double enc. packet
+- 802.1Q in 802.1Q (Q-in-Q) is used in LAN (inner) + metropolitan-area Ethernet (outer)
+- access switch MUST be configured to accept VLAN tags (by enabling VoIP on data line on a different VLAN)
+- native VLAN tag is stripped at access switch before going trunk for backward compatibility
+- will only work if attacking port = native trunk VLAN & switchport voice is enabled
+- attack is only one-way, mainly for DOS
+- to block, ensure native VLAN is not used for any access ports or force all traffic to be tagged (newer switches)
+
+Spanning Tree Protocol (STP) attack
+- use yersinia command -> STP -> claiming root role
+- use Switch Port Analyzer (SPAN) to forward from rouge switch to attacker
+- attacker connect to 2 STP-blocking ports to inject BPDU with lower bridge ID to take over root switch and capture frames
+- to block new endpoint <-> switch, enable portfast (enables BPDU guard) or manually enable BPDU guard
+- to block existing switch <-> switch, enable root guard on root switch
+
+Network information leakage (via Cisco Discovery Protocol (CDP))
+- use wireshark to capture CDP packets
+- CDP is used by cisco devices to share device information (VLAN ID, IP, etc)
+- to block, disable CDP except on VoIP ports which require it
+===
+
+LAB 3
+
+DHCP Starvation Attack
+- use yersinia command -> DHCP -> sending DISCOVER packet
+- usable IP addresses get exhausted
+- port security alone is insufficient as Client Host Address (chaddr) in DCHP Application layer can be spoofed while maintaining 1 mac in Ethernet layer
+
+Rouge DHCP Server (DHCP Spoofing)
+- use Metasploit -> use auxiliary/server/dhcp -> set <options in show options> <ips>
+- to be used after DHCP starvation to ensure attacker is the only DHCP server
+
+Rouge DNS Server (DNS Spoofing)
+- use dnschef --interface <your ip> --fakeip <fake webserver>
+- redirect all dns traffic of hosts connecting to you to a fake webserver (usually for stealing credentials)
+- only works if you are the default gateway
+
+Blocking above 3 attacks
+- enable DHCP snooping -> ip dhcp snooping
+- perform deep packet inspection and verify Ethernet layer MAC = Application layer chaddr -> ip dhcp snooping verify mac-address
+- set DHCP snooping rate limit to prevent multiple DHCP DISCOVER packets from 1 port
+- when DHCP snooping is enabled, all untrusted ports are disallowed to send DHCP OFFER & DHCP ACK packets, preventing rouge server. To trust actual DHCP server, trust port -> interface <if>; ip dhcp snooping trust
+- when DHCP snooping is enabled, option-82 agent field is inserted into DHCP DISCOVER packet. Since relay-agent IP is 0.0.0.0 it will be discarded by next hop switch or router. To fix -> [DHCP Router] ip dhcp relay information trust-all OR [Relay Switch] no ip dhcp snooping information option
+
+ARP Poisoning (leading to Man in the Middle Attack)
+- use bettercap -> net probe on -> net probe off -> net show -> set arp.spoof.targets <ip> -> set arp.spoof.fullduplex true -> arp.spoof on -> net.sniff.local true -> net.sniff on
+- attacker sends gratuitous ARP reply to victim advertising that router's IP is bound to attacker's MAC
+- attacker sends gratuitous ARP reply to router advertising that victim's IP is bound to attacker's MAC
+- all communications now pass through attacker who can monitor and modify traffic
+- use driftnet to see images
+- use SSL stripping to bypass HTTPS/HSTS
+- to block, enable Dynamic ARP Inspection (DAI) with DHCP Snooping (to allow comparison with DHCP Snooping Binding Table) -> ip arp inspection -> ip arp inspection trust (on DHCP server)
+- to block without DHCP Snooping, configure DAI with ARP ACL -> arp access-list <acl_name> -> permit ip host <sender-ip> mac host <sender-mac> -> ip arp inspection vlan <vlan> -> ip arp inspection filter <acl_name> vlan <vlan> -> (trust ports between network devices)
+- to block probing for devices on network, set ARP rate limit (default 15) -> ip arp inspection limit <n>
+- DAI can also validate contents of ARP reply (between L2 & L3) to match Ethernet (L2) and IP (L3) layer to prevent bypassing port security -> ip arp inspection validate <src-mac/dst-mac/ip>
+===
+
+LAB 4
+
+- Standard numbered ACL is used to filter network traffic based on source IP addresses, at Layer 3 only. (any number from 1-99 or 1300-1999)
+- Extended numbered ACL is more powerful as it can filter network traffic based on protocol type, source/destination IP addresses, and source/destination port numbers, at Layer 3 and 4 based on more attributes. (any number from 100-199 or 2000-2699). At a minimum, the test-conditions must specify protocol type, source IP address and destination IP address. For tcp and udp protocol type, the test-conditions can further specify to filter based on layer 4 source port numbers and/or destination port numbers if need to.
+- Named ACL enables ACL to be configured with meaningful name to make it easier to remember. (any alphanumeric characters)
+- Time-based ACL enhances ACL with time range to automatically turn on/off ACL which can be useful in practice. Time-based ACLs are basically ACLs enhanced with time-range which will only become operational during certain time of the day or week
+- Object group-based ACL is a new way of writing ACL to make it more readable and manageable. First, configure related objects into object groups:
+	Network
+		-host IP
+		-IP ranges
+		-subnet
+		-etc
+	Service
+		-protocol
+		-port number
+		-etc
+		-e.g. tcp www
+
+Action taken: Permit or deny
+Conditions: Standard -> matches source IP address
+	   Extended -> matches source IP address, destination IP address, protocol type, port number
+
+**ACLs are processed from top to bottom, i.e. packet will get checked against the rule in the first line, then the second etc.
+
+**Whitelist ACLs should usually end with a default (deny ip any any), to deny all other traffic.
+**Blacklist ACLs should end with a default (permit ip any any), to allow all other traffic passing through
+** Typically, ACL is written with more specific ACEs (in terms of IP addresses) at the top and more general ACEs at the bottom.
+
+General guidelines on ACL:
+	- One ACL per direction: ACL can only filter packets in one direction as configured. To filter both ingress and egress traffic, two separate ACLs must be written.
+	- One ACL per interface: Only one in ACL and one out ACL can be applied on each interface.
+	- One ACL per protocol: Separate ACLs must be written to filter IPv4 and IPv6 packets (not covered in this module)
+	- Commonly applied on the switch SVIs or router interfaces to filter ingress or egress IP packets, usually to and from the Internet.
+	- Standard ACLs can only filter based on source IP. To avoid unintentionally filtering more packets than necessary, it is recommended to be implemented near the destination
+	- numbered ACL is written by (1) specifying the related ACEs using the same access-list-number, and (2) applying the complete ACL on the required interface
+	- More powerful extended numbered ACL for controlling access to networks or end hosts/servers
+
+Ingess-Filtering ACL
+	- Router filters all IP packets received on that interface
+	- Only permitted packets are then processed and forwarded
+
+Egress-Filtering ACL
+	- Only after forwarding decision is made
+	- IP packets are then filtered before permitted to be sent out from that interface
+
+------------------------------------------------------LAB 5 Routers---------------------------------------------------------
+
+- Usually first point of contact and entry
+- To prevent external attackers, ACLs (access control lists) are commonly implemented at the perimeter/edge router and firewall which connect the enterprise network to the Internet
+
+Recon
+- Network probing
+- Port scanning attack
+- Technically, network probing and scanning attacks are based on sending ARP, ICMP, TCP or UDP requests and receiving/not receiving the replies
+- Unfortunately, it can be difficult to fully prevent network probing and scanning attacks cus of normal traffic; but some may be blocked by suitable ACLs; e.g. ingress filtering of ICMP scan.
