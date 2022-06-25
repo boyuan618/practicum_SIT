@@ -24,6 +24,18 @@ class DHCP_am(DHCP_am):
         return resp
 
 def main():
-    interface = input("Enter interface")
-    dhcp_server = DHCP_am(iface='Ethernet0', pool=Net('10.0.0.128/25'), network='10.0.0.0/24', gw='10.0.0.1',renewal_time=600, lease_time=3600)
+    #Retrieve settings from user
+    interface = input("Enter interface to listen on: ").strip()
+    dhcp_pool = input("Enter dhcp pool (network ip/subnet mask, e.g. 10.0.0.0/24): ").strip()
+    curr_network = input("Enter current network (network ip/subnet mask, e.g. 10.0.0.0/24): ").strip()
+    gateway = input("Enter default gateway: ").strip()
+    renew_time = int(input("Enter renewal time: ").strip())
+    lend_time = int(input("Enter lease time: ").strip())
+    
+    #Starting DHCP server
+    dhcp_server = DHCP_am(iface=interface, pool=Net(dhcp_pool), network=curr_network, gw=gateway,renewal_time=renew_time, lease_time=lend_time)
     dhcp_server()
+
+
+if __name__ == "__main__":
+    main()

