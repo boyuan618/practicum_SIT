@@ -35,6 +35,7 @@ def main():
     
     #Starting DHCP server
     dhcp_server = DHCP_am(iface=interface, pool=Net(dhcp_pool), network=curr_network, gw=gateway,renewal_time=renew_time, lease_time=lend_time)
+    print("Starting DHCP server.")
     dhcp_server()
 
 
