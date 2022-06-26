@@ -1,0 +1,3 @@
+#!/bin/bash
+xrdb $HOME/.Xresources
+xfce4-session
