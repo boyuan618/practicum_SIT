@@ -132,6 +132,7 @@ interface Vlan12
 !
 ip classless
 ip route 10.0.7.0 255.255.255.252 GigabitEthernet1/0/3 
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet1/0/1 
 !
 ip flow-export version 9
 !
