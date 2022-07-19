@@ -38,17 +38,17 @@ spanning-tree mode pvst
 !
 !
 !
-interface GigabitEthernet0/0
+interface GigabitEthernet0/0/0
  ip address 10.0.6.2 255.255.255.252
  duplex auto
  speed auto
 !
-interface GigabitEthernet0/1
+interface GigabitEthernet0/0/1
  ip address 10.0.14.1 255.255.255.252
  duplex auto
  speed auto
 !
-interface GigabitEthernet0/2
+interface GigabitEthernet0/1/0
  ip address 10.0.3.1 255.255.255.240
  duplex auto
  speed auto
@@ -60,7 +60,7 @@ interface Vlan1
 router rip
 !
 ip classless
-ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0 
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0/0
 !
 ip flow-export version 9
 !
