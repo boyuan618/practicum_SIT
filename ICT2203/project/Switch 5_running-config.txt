@@ -15,20 +15,35 @@ spanning-tree mode pvst
 spanning-tree extend system-id
 !
 interface FastEthernet0/1
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/2
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/3
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/4
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/5
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/6
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/7
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/8
+ switchport access vlan 2
  switchport mode access
 !
 interface FastEthernet0/9
@@ -58,10 +73,16 @@ interface FastEthernet0/20
 interface FastEthernet0/21
 !
 interface FastEthernet0/22
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/23
+ switchport access vlan 2
+ switchport mode access
 !
 interface FastEthernet0/24
+ switchport access vlan 2
+ switchport mode access
 !
 interface GigabitEthernet0/1
 !

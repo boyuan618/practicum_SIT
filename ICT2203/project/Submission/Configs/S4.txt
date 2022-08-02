@@ -1,0 +1,379 @@
+Current configuration : 9646 bytes
+!
+! Last configuration change at 15:16:51 SGT Sun Jul 31 2022 by admin
+!
+version 15.2
+no service pad
+no service timestamps debug uptime
+no service timestamps log uptime
+no service password-encryption
+!
+hostname Switch_4
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$iph8$nG.nxqUH/2e6W/FEesY2t.
+!
+username admin secret 5 $1$5yZP$VnSkicAbbmtOQfG.mpEAP/
+aaa new-model
+!
+!
+aaa authentication login default group tacacs+ group radius local
+!
+!
+!
+!
+!
+!         
+aaa session-id common
+clock timezone SGT 8 0
+switch 1 provision ws-c2960x-24ts-l
+ip arp inspection vlan 11
+ip arp inspection validate src-mac 
+!
+!
+ip dhcp snooping vlan 11
+ip dhcp snooping
+ip domain-name remote.com
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+errdisable recovery cause bpduguard
+errdisable recovery cause psecure-violation
+errdisable recovery cause dhcp-rate-limit
+errdisable recovery cause arp-inspection
+errdisable recovery interval 600
+!
+!
+!         
+!
+vlan internal allocation policy ascending
+no cdp run
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0
+ ip address 10.0.3.9 255.255.255.240
+!
+interface GigabitEthernet1/0/1
+ switchport trunk native vlan 28
+ switchport mode trunk
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0078.8834.1018 vlan 1
+ switchport port-security mac-address sticky 0000.0c07.ac02 vlan 11
+ switchport port-security mac-address sticky 0002.1770.a002 vlan 11
+ ip arp inspection trust
+ ip dhcp snooping trust
+!         
+interface GigabitEthernet1/0/2
+ switchport trunk native vlan 28
+ switchport mode trunk
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 5c71.0dbd.7e18 vlan 1
+ switchport port-security mac-address sticky 0003.e42a.4602 vlan 11
+ ip arp inspection trust
+ ip dhcp snooping trust
+!
+interface GigabitEthernet1/0/3
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/4
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/5
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 70b5.e8a5.9867
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/6
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/7
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 20fe.ab1c.ff16
+ switchport port-security mac-address sticky 22d4.f437.fa5c
+ switchport port-security mac-address sticky 24f3.4d35.20fe
+ switchport port-security mac-address sticky 40f6.a407.783e
+ switchport port-security mac-address sticky 70b5.e8a5.9879
+ switchport port-security mac-address sticky 9e33.5355.7c95
+ switchport port-security mac-address sticky de22.3760.7217
+ switchport port-security mac-address sticky feda.5756.ba60
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/8
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/9
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/10
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/11
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/12
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/13
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/14
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/15
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/16
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/17
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/18
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/19
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/20
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/21
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/22
+ switchport access vlan 11
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/23
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/24
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip verify source port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet1/0/25
+ switchport access vlan 200
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/0/26
+ switchport access vlan 200
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/0/27
+ switchport access vlan 200
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/0/28
+ switchport access vlan 200
+ switchport mode access
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip http server
+ip http secure-server
+!
+ip ssh version 2
+!
+logging host 10.0.14.2
+!
+tacacs server TACACSERVER
+ address ipv4 10.0.14.2
+ key noemail
+!
+!
+radius server RADIUSERVER
+ address ipv4 10.0.14.2 auth-port 1812 acct-port 1813
+ key noemail
+!
+no vstack
+!
+line con 0
+line vty 0 4
+ transport input ssh
+line vty 5 15
+ transport input ssh
+!
+ntp logging
+ntp authentication-key 1 md5 1040061C08161B07 7
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.0.3.2 key 1
+end

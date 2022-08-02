@@ -1,0 +1,195 @@
+Current configuration : 4368 bytes
+!
+! Last configuration change at 15:18:03 SGT Sun Jul 31 2022 by admin
+!
+version 16.9
+no service timestamps debug uptime
+no service timestamps log uptime
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+!
+hostname Router_2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 5 $1$zC8E$V4xeeHEXgFRYxciVId/Jw1
+!
+aaa new-model
+!         
+!
+aaa authentication login default group tacacs+ group radius local
+!
+!
+!
+!
+!
+!
+aaa session-id common
+clock timezone SGT 8 0
+!
+!
+!
+!
+!
+!
+!
+ip name-server 8.8.8.8
+ip domain name remote.com
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!         
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+multilink bundle-name authenticated
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-3016240420
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3016240420
+ revocation-check none
+ rsakeypair TP-self-signed-3016240420
+!
+!
+crypto pki certificate chain TP-self-signed-3016240420
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 33303136 32343034 3230301E 170D3232 30373139 30383032 
+  31345A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 30313632 
+  34303432 30308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201 
+  0A028201 0100B560 C5D14CD4 C0DA7AA0 78886E90 5E88EFE5 B7BA3147 6612C7FD 
+  78C65FCC 2C6504FC 4BDDA214 3435B253 4779F55A 2C2CBD64 8383572F 7A4E2D78 
+  6BEC7C92 0D0608AE 0FFDE78F D8C58EAC 8BAB6A81 8AC66711 8DE330B2 9FC6A545 
+  166EB935 7BC7B327 57A72D18 AEFDB8D6 996BD697 06B9ED5E 60A93E3F 2D6F4066 
+  7A3CD487 A79AA00D 9370CDE5 A7FBCFCC DAF6921B 25EF65F1 969EE804 4B1314B0 
+  F85E8616 0AFBE5E5 85B5ACAF 72C7E0EB 0D77D114 EF4BAAF9 7B08035C 3EDDCCFD 
+  2AE779B4 70BB11E5 F52E438A E374A898 3FB1220B 78CFB1C7 73947509 FF7C7B01 
+  D484936F E9E36CA7 6B1FE064 AE181686 673B1029 C98CA82C 50D41FF3 380C6EF7 
+  40E53F01 7C9B0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 
+  301F0603 551D2304 18301680 141E37EB 0349B53C 0DC132C8 FC5CE0BB DC072E97 
+  60301D06 03551D0E 04160414 1E37EB03 49B53C0D C132C8FC 5CE0BBDC 072E9760 
+  300D0609 2A864886 F70D0101 05050003 82010100 365903D0 CBA6D686 48E8DCB9 
+  E128E265 CA6DD6A2 0941D45D 55677894 083D9A10 637B2ED3 6A560B04 B93C98FC 
+  165738F7 BDB3100D 3BAA88B3 6037EA2F AAA51C0D 991E87D4 283D1C94 D007B18D 
+  162FFDD9 CB8F34B0 E32EE445 2C6F5252 194A25C2 512FFBA0 FE96C88A 9CB99821 
+  75B96B09 75F6E4F5 FA298BFD DDBC1579 1F6ECFF8 C97B978E 174DDE15 B82C877B 
+  1133DB09 30AABF75 1B5BFD6D E689AC67 3ADC3A55 1B616012 821F7FE4 F97E7248 
+  7062FCEE 4137D07D 92E9F7FC 86C32293 9047A8AD 2D9C1BA2 DE7887F4 6F7332EC 
+  A7530FBD CD0AC7BF 9B9FCCD0 CF403694 3C23BE9F 8DAA5B74 7ABDCA9E 2D0BE1B7 
+  41B0FFE3 369A16F7 D7AADB2B 6D8C9A03 D427117E
+        quit
+!
+license udi pid ISR4321/K9 sn FDO2344101X
+license boot level appxk9
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+username admin secret 5 $1$sgDa$NeqiDxpLvcJ67M8JIP4yv1
+!
+redundancy
+ mode none
+!
+!
+!
+no cdp run
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface GigabitEthernet0/0/0
+ ip address 10.0.6.2 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/0/1
+ ip address 10.0.14.1 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet0/1/0
+ ip dhcp relay information trusted
+ ip address 10.0.3.12 255.255.255.240
+ negotiation auto
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ ip address 10.0.3.5 255.255.255.240
+ negotiation auto
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+ip tftp source-interface GigabitEthernet0
+ip route 0.0.0.0 0.0.0.0 10.0.6.1
+!
+ip ssh version 2
+!
+logging host 10.0.14.2
+!
+!
+tacacs server TACACSERVER
+ address ipv4 10.0.14.2
+ key noemail
+!
+!
+!
+radius server RADIUSERVER
+ address ipv4 10.0.14.2 auth-port 1812 acct-port 1813
+ key noemail
+!
+!
+control-plane
+!
+!
+line con 0
+ transport input none
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ transport input ssh
+line vty 5 15
+ transport input ssh
+!
+ntp logging
+ntp authentication-key 1 md5 07012E4943081009 7
+ntp trusted-key 1
+ntp server 0.sg.pool.ntp.org
+!
+!
+!
+!
+!
+end

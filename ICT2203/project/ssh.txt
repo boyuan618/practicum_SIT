@@ -1,0 +1,23 @@
+en
+conf t
+ip domain-name remote.com
+ip domain name remote.com
+crypto key generate rsa modulus 2048
+ip ssh version 2
+enable secret noemail
+aaa new-model
+tacacs server TACACSERVER
+address ipv4 10.0.14.2
+key noemail
+exit
+radius server RADIUSERVER
+address ipv4 10.0.14.2 auth-port 1812 acct-port 1813
+key noemail
+exit
+username admin secret noemail
+aaa authentication login default group tacacs+ group radius local
+line vty 0 15
+transport input ssh
+
+
+

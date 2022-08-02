@@ -1,0 +1,300 @@
+Current configuration : 6667 bytes
+!
+! Last configuration change at 15:23:14 SGT Sun Jul 31 2022 by admin
+!
+version 15.0
+no service pad
+no service timestamps debug uptime
+no service timestamps log uptime
+no service password-encryption
+!
+hostname Switch_5
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$72ft$vYe0ucd9n92j1PKeh2Vj.1
+!
+username admin secret 5 $1$YyRP$82Ja9O/2F80I.xvurEiwp.
+aaa new-model
+!
+!
+aaa authentication login default group tacacs+ group radius local
+!
+!
+!
+!
+!
+!         
+aaa session-id common
+clock timezone SGT 8 0
+system mtu routing 1500
+!
+!
+ip dhcp snooping vlan 2
+ip domain-name remote.com
+!
+!
+!
+!
+!
+!
+!
+!
+errdisable recovery cause bpduguard
+errdisable recovery cause psecure-violation
+errdisable recovery interval 600
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+!
+!         
+!
+interface FastEthernet0/1
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/2
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/3
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/4
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/5
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/6
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/7
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/8
+ switchport access vlan 2
+ switchport mode access
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/9
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/10
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/11
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/12
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/13
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/14
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/15
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/16
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/17
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/18
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/19
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/20
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/21
+ switchport access vlan 200
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ shutdown 
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/22
+ switchport access vlan 2
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/23
+ switchport access vlan 2
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 25
+!
+interface FastEthernet0/24
+ switchport access vlan 2
+ switchport mode access
+ switchport port-security maximum 8
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0050.b6b9.8fa2
+ switchport port-security
+ ip dhcp snooping limit rate 25
+!
+interface GigabitEthernet0/1
+ switchport access vlan 200
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/2
+ switchport access vlan 200
+ switchport mode access
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan2
+ ip address 10.0.3.2 255.255.255.240
+!
+ip http server
+ip http secure-server
+logging host 10.0.14.2
+no cdp run
+tacacs server TACACSERVER
+ address ipv4 10.0.14.2
+ key noemail
+!
+radius server RADIUSERVER
+ address ipv4 10.0.14.2 auth-port 1812 acct-port 1813
+ key noemail
+!
+!
+!
+vstack
+!
+line con 0
+line vty 0 4
+ transport input ssh
+line vty 5 15
+ transport input ssh
+!
+ntp logging
+ntp authentication-key 1 md5 0505090A2C4D4705 7
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.0.3.12 key 1
+ntp server 0.sg.pool.ntp.org
+end

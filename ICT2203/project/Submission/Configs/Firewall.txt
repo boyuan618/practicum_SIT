@@ -1,0 +1,195 @@
+ASA Version 9.1(2) 
+!
+hostname Firewall
+domain-name remote.com
+enable password Bxxu6SAGyPb7Ab8S encrypted
+xlate per-session deny tcp any4 any4
+xlate per-session deny tcp any4 any6
+xlate per-session deny tcp any6 any4
+xlate per-session deny tcp any6 any6
+xlate per-session deny udp any4 any4 eq domain
+xlate per-session deny udp any4 any6 eq domain
+xlate per-session deny udp any6 any4 eq domain
+xlate per-session deny udp any6 any6 eq domain
+xlate per-session deny tcp any4 any4
+xlate per-session deny tcp any4 any6
+xlate per-session deny tcp any6 any4
+xlate per-session deny tcp any6 any6
+xlate per-session deny udp any4 any4 eq domain
+xlate per-session deny udp any4 any6 eq domain
+xlate per-session deny udp any6 any4 eq domain
+xlate per-session deny udp any6 any6 eq domain
+names
+!
+interface GigabitEthernet0/0
+ nameif switch1
+ security-level 100
+ ip address 10.0.0.1 255.255.255.252 
+!
+interface GigabitEthernet0/1
+ nameif switch2
+ security-level 100
+ ip address 10.0.1.1 255.255.255.252 
+!
+interface GigabitEthernet0/2
+ nameif router1
+ security-level 0
+ ip address 10.0.2.2 255.255.255.252 
+!
+interface GigabitEthernet0/3
+ nameif web
+ security-level 50
+ ip address 10.0.4.1 255.255.255.252 
+!
+interface GigabitEthernet0/4
+ nameif jump
+ security-level 50
+ ip address 10.0.5.1 255.255.255.252 
+!             
+interface GigabitEthernet0/5
+ nameif router2
+ security-level 100
+ ip address 10.0.6.1 255.255.255.252 
+!
+interface Management0/0
+ nameif mgmt
+ security-level 100
+ ip address 10.0.3.3 255.255.255.240 
+!
+regex xss "<script> "
+ftp mode passive
+clock timezone SGT 8
+dns server-group DefaultDNS
+ domain-name remote.com
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+access-list web extended permit tcp any host 10.0.4.2 eq www 
+access-list no_internet extended permit ip 10.0.10.0 255.255.255.224 host 10.0.4.2 
+access-list no_internet extended deny ip 10.0.10.0 255.255.255.224 any 
+access-list no_internet extended permit ip any any 
+access-list jump extended permit tcp any host 10.0.5.2 eq www 
+pager lines 24
+logging enable
+logging trap informational
+logging host router2 10.0.14.2
+mtu switch1 1500
+mtu switch2 1500
+mtu router1 1500
+mtu web 1500
+mtu jump 1500
+mtu router2 1500
+mtu mgmt 1500
+icmp unreachable rate-limit 1 burst-size 1
+no asdm history enable
+arp timeout 14400
+no arp permit-nonconnected
+access-group no_internet in interface switch1
+access-group no_internet in interface switch2
+access-group jump in interface jump
+route router1 0.0.0.0 0.0.0.0 10.0.2.1 1
+route switch1 10.0.10.0 255.255.255.224 10.0.0.2 1
+route switch1 10.0.11.0 255.255.255.224 10.0.0.2 1
+route router2 10.0.14.0 255.255.255.252 10.0.6.2 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+dynamic-access-policy-record DfltAccessPolicy
+aaa-server group1 protocol tacacs+
+ reactivation-mode depletion deadtime 15
+ max-failed-attempts 2
+aaa-server group1 (router2) host 10.0.14.2
+ timeout 15
+ key *****
+aaa-server group2 protocol radius
+ reactivation-mode depletion deadtime 15
+ max-failed-attempts 2
+aaa-server group2 (router2) host 10.0.14.2
+ key *****
+user-identity default-domain LOCAL
+aaa authentication ssh console group1 LOCAL
+no snmp-server location
+no snmp-server contact
+snmp-server enable traps snmp authentication linkup linkdown coldstart warmstart
+crypto ipsec security-association pmtu-aging infinite
+crypto ca trustpool policy
+telnet timeout 5
+ssh 10.0.3.0 255.255.255.240 mgmt
+ssh timeout 5
+ssh version 2
+ssh key-exchange group dh-group1-sha1
+console timeout 0
+threat-detection basic-threat
+threat-detection statistics access-list
+threat-detection statistics tcp-intercept rate-interval 3 burst-rate 60 average-rate 30
+ntp authentication-key 1 md5 *****
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.0.3.2 key 1
+username admin password R4nNMXdf2k3nkc.f encrypted privilege 15
+!
+class-map type inspect http match-any match_xss
+ match request body regex xss
+class-map inspection_default
+ match default-inspection-traffic
+class-map http_web
+ match access-list web
+class-map http_xss
+!             
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect ftp 
+  inspect h323 h225 
+  inspect h323 ras 
+  inspect ip-options 
+  inspect netbios 
+  inspect rsh 
+  inspect rtsp 
+  inspect skinny  
+  inspect esmtp 
+  inspect sqlnet 
+  inspect sunrpc 
+  inspect tftp 
+  inspect sip  
+  inspect xdmcp 
+  inspect icmp 
+policy-map type inspect http xss_policy
+ parameters
+  protocol-violation action log
+ class match_xss
+  drop-connection log
+policy-map policy_xss
+ class http_xss
+  inspect http xss_policy 
+policy-map policy_web
+ class http_web
+  set connection conn-max 200 embryonic-conn-max 100 per-client-max 30 per-client-embryonic-max 10 
+!
+service-policy global_policy global
+service-policy policy_web interface router1
+service-policy policy_xss interface web
+prompt hostname context 
+no call-home reporting anonymous
+call-home
+ profile CiscoTAC-1
+  no active
+  destination address http https://tools.cisco.com/its/service/oddce/services/DDCEService
+  destination address email callhome@cisco.com
+  destination transport-method http
+  subscribe-to-alert-group diagnostic
+  subscribe-to-alert-group environment
+  subscribe-to-alert-group inventory periodic monthly 8
+  subscribe-to-alert-group configuration periodic monthly 8
+  subscribe-to-alert-group telemetry periodic daily
+Cryptochecksum:fe300c4eca1a8f0c9b8d003e0b1af1a4
+: end
