@@ -1,0 +1,20 @@
+hostname R2
+
+int G0/0/0
+ ip address 172.27.47.97 255.255.255.248
+ no shut
+ ip nat outside
+
+int G0/0/1
+ ip address 192.168.2.102 255.255.255.252
+ no shut
+ ip nat inside
+
+ip route 0.0.0.0 0.0.0.0 172.27.47.98
+ip nat pool public_access 129.126.164.97 129.126.164.101 netmask 255.255.255.248
+ip nat inside source static 10.0.0.2 129.126.164.102
+ip nat inside source list 1 pool public_access overload
+ip name-server 8.8.8.8
+ntp authentication-key 1 md5 SUPERSECRET
+ntp trusted-key 1
+ntp server 0.sg.pool.ntp.org

@@ -1,0 +1,27 @@
+hostname FW
+
+int G0/1
+ nameif outside
+ security-level 0
+ ip address 192.168.2.101 255.255.255.252
+ no shut
+
+int G0/2
+ nameif web
+ security-level 50
+ ip address 129.126.164.101 255.255.255.252
+ no shut
+
+route outside 0.0.0.0 0.0.0.0 192.168.2.102
+access-list web extended permit tcp any host 129.126.164.102 eq www 
+class-map http_web
+ match access-list web
+policy-map policy_web
+class http_web
+set connection conn-max 200 embryonic-conn-max 100 per-client-max 30 per-client-embryonic-max 10 
+service-policy policy_web interface outside
+ntp authentication-key 1 md5 SUPERSECRET
+ntp authenticate
+ntp trusted-key 1
+ntp server 192.168.2.102 key 1
+

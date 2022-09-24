@@ -1,0 +1,18 @@
+hostname R1
+
+int G0/1
+ip address 192.168.30.2 255.255.255.252
+no shut
+
+ip dhcp pool 10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1 
+!
+ip dhcp pool 20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+!
+ip dhcp excluded-address 192.168.10.1 
+ip dhcp excluded-address 192.168.20.1
+ip dhcp relay information trust-all 
+ip route 0.0.0.0 0.0.0.0 192.168.30.1

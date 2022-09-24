@@ -1,0 +1,28 @@
+hostname S2
+
+vlan 10
+vlan 20
+ip dhcp snooping
+ip dhcp snooping vlan 10
+ip dhcp snooping vlan 20
+no ip dhcp snooping information option
+errdisable recovery cause all
+errdisable recovery interval 30
+
+int G1/0/24
+swi m tr
+ip dhcp snooping trust
+
+int r G1/0/1-12
+swi m a
+swi a vlan 10
+ip dhcp snooping limit rate 3
+switchport port-security
+ip verify source port-security
+
+int r G1/0/13-23
+swi m a 
+swi a vlan 20
+ip dhcp snooping limit rate 3
+switchport port-security
+ip verify source port-security
